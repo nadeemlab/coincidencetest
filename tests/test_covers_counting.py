@@ -2,6 +2,7 @@
 import coincidencetest
 import coincidencetest.algorithms.recursion_method as rm
 import coincidencetest.algorithms.brute_force as bf
+import coincidencetest.algorithms.binomial_method as bm
 
 def test_manually_validated_cases():
     cases = {
@@ -43,6 +44,25 @@ def test_agreement_with_brute_force():
             ambient_size = ambient_size,
         )
         assert(library_calculated == brute_force)
+
+def test_agreement_with_binomial():
+    cases = [
+        ((2, 2), 3),
+        ((3, 1), 4),
+        ((3, 2), 4),
+        ((3, 3, 4), 7),
+        ((3, 3, 5, 2), 8),
+    ]
+    for set_sizes, ambient_size in cases:
+        library_calculated = rm.number_of_covers(
+            set_sizes = set_sizes,
+            ambient_size = ambient_size,
+        )
+        binomial_calculated = bm.number_of_covers(
+            set_sizes = set_sizes,
+            ambient_size = ambient_size,
+        )
+        assert(library_calculated == binomial_calculated)
 
 def large_non_crashing_example():
     l = (18, 15, 16, 8, 18)
