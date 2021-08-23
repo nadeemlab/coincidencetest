@@ -17,8 +17,9 @@ def do_example(
         ))
         for intersection_size, set_sizes, ambient_size in cases
     }
+    t = sum(outputs.values())
     cdf = [
-        Decimal(1) - sum([outputs[j] for j in range(0, i)]) for i in range(len(outputs))
+        t - sum([outputs[j] for j in range(0, i)]) for i in range(len(outputs))
     ]
 
     print('For')
@@ -28,10 +29,11 @@ def do_example(
     print('')
     print('\n'.join(str(i) + ' : ' + str(p) for i, p in outputs.items()))
     print('')
-    print('Total probability: ' + str(sum(outputs.values())))
+    print('Total probability: ' + str(t))
     print('')
     print('CDF:')
     print('\n'.join([str(i) + ' : ' + str(cdf[i]) for i in range(len(cdf))]))
+    print('')
 
 def basic_running_examples():
     do_example(set_sizes = (3, 3, 3), ambient_size = 5)
