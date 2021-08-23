@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import coincidencetest
 from coincidencetest.algorithm import stirling_second_kind
 
