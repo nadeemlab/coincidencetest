@@ -46,6 +46,7 @@ def test_agreement_with_brute_force():
         ((3, 1), 4),
         ((3, 2), 4),
         ((3, 3, 4), 7),
+        ((3, 3, 5, 2), 8),
     ]
     for set_sizes, ambient_size in cases:
         library_calculated = number_of_covers(
