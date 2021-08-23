@@ -1,7 +1,7 @@
 from itertools import combinations
 from itertools import product
 
-def brute_force_count_covers(
+def number_of_covers(
     set_sizes: tuple=(),
     ambient_size: int=0,
 ):

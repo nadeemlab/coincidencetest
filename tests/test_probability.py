@@ -1,7 +1,7 @@
 from decimal import Decimal
 
 import coincidencetest
-from coincidencetest.algorithm import calculate_probability_of_multicoincidence
+from coincidencetest import calculate_probability_of_multicoincidence
 
 def do_example(
     set_sizes = (3, 3, 3),
