@@ -1,5 +1,5 @@
 import coincidencetest
-from coincidencetest.algorithm import stirling_second_kind
+from coincidencetest.algorithms.recursion_method import stirling_second_kind
 
 def test_small():
     assert(stirling_second_kind(ambient_size=3, number_parts=3) == 1)
