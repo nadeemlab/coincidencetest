@@ -1,3 +1,11 @@
+"""
+The `coincidencetest` is an exact test for the probability of "coincidence" of
+several binary features along a subsample of a given size, given the positivity
+rates for each feature.
+
+It can be used to assess biclusters found in a feature matrix.
+"""
+
 import math
 from math import log10
 from math import floor
@@ -90,7 +98,7 @@ def compute_number_of_covers(set_sizes: tuple=(), ambient_size: int=0,
 
     if strategy == 'recursion':
         number_subsets = len(set_sizes)
-        if all([size == 1 for size in set_sizes]):
+        if all(size == 1 for size in set_sizes):
             if number_subsets == ambient_size:
                 return factorial(ambient_size)
             if number_subsets < ambient_size:
@@ -106,14 +114,15 @@ def compute_number_of_covers(set_sizes: tuple=(), ambient_size: int=0,
             return 0
         if ambient_size == 0:
             return 0
-        if any([size > ambient_size for size in set_sizes]):
+        if any(size > ambient_size for size in set_sizes):
             return 0
         if len(set_sizes) == 1:
             size = set_sizes[0]
             if size == ambient_size:
                 return 1
-            elif size < ambient_size:
+            if size < ambient_size:
                 return 0
+            raise ValueError('ambient_size %s too small?' % ambient_size)
         if len(set_sizes) == 0:
             return 0
 
@@ -126,6 +135,7 @@ def compute_number_of_covers(set_sizes: tuple=(), ambient_size: int=0,
             for selected in powerset(number_subsets) if selected != ()
         ]
         return sum(counts_by_strata)
+    return None
 
 def multinomial(subset_sizes):
     """
@@ -151,8 +161,8 @@ def stirling_second_kind(ambient_size: int=0, number_parts: int=0,
                          normalized: bool=False):
     """
     Computes an (unnormalized or ordinary) Stirling number of the second kind.
-    If unnormalized, the division by the factorial of the ambient size is not
-    performed.
+    Default is unnormalized, meaning that the division by the factorial of the
+    ambient size is not performed.
 
     Parameters
     ----------
@@ -177,8 +187,7 @@ def stirling_second_kind(ambient_size: int=0, number_parts: int=0,
     ]
     if normalized:
         return sum(terms) // factorial(number_parts)
-    else:
-        return sum(terms)
+    return sum(terms)
 
 def number_of_surjective_functions(source_size: int=0, target_size: int=0):
     """
@@ -220,7 +229,7 @@ def powerset(set_size):
         combinations(base_set, r) for r in range(len(base_set) + 1)
     ))
 
-def reduce_set_sizes(set_sizes: tuple=(), which: list=[]):
+def reduce_set_sizes(set_sizes: tuple=(), which: list=None):
     """
     Convenience function to decrement specific members of a tuple of integers.
 
@@ -283,8 +292,8 @@ def calculate_probability_of_multicoincidence(ambient_size: int=0,
         intersection size, divided by the number of all configurations.
     """
     reduced_sizes = [size - intersection_size for size in set_sizes]
-    if any([size < 0 for size in reduced_sizes]):
-        raise ValueError('Intersection size %s is not possible.', intersection_size)
+    if any(size < 0 for size in reduced_sizes):
+        raise ValueError('Intersection size %s is not possible.' % intersection_size)
 
     initial_choices = binom(ambient_size=ambient_size, subset_size=intersection_size)
     reduced_ambient_size = ambient_size - intersection_size
@@ -348,8 +357,7 @@ def coincidencetest(incidence_statistic, frequencies, number_samples,
     total = sum(probabilities.values())
     if format_p_value:
         return reduce_digits_p_value(total)
-    else:
-        return total
+    return total
 
 def reduce_digits_p_value(p_value):
     """
