@@ -1,7 +1,6 @@
 import setuptools
 import os
 from os.path import join, dirname
-import re
 
 def get_file_contents(filename):
     package_directory = dirname(__file__)
@@ -9,11 +8,8 @@ def get_file_contents(filename):
         contents = file.read()
     return contents
 
-long_description = """[Documentation](https://coincidencetest.readthedocs.io/en/stable/readme.html).
-"""
-
+long_description = get_file_contents('README.md')
 requirements = []
-
 version = get_file_contents(join('coincidencetest', 'version.txt'))
 
 setuptools.setup(
@@ -36,7 +32,7 @@ setuptools.setup(
     python_requires='>=3.8',
     install_requires=requirements,
     project_urls = {
-        'Documentation': 'https://coincidencetest.readthedocs.io/en/stable/readme.html',
+        'Documentation': 'https://github.com/jimmymathews/coincidencetest',
         'Source code': 'https://github.com/jimmymathews/coincidencetest',
     },
     url = 'https://github.com/jimmymathews/coincidencetest',
