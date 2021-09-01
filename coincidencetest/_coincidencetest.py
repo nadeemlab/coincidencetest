@@ -1,4 +1,6 @@
 import math
+from math import log10
+from math import floor
 from math import factorial
 from itertools import combinations
 from itertools import product
@@ -295,3 +297,74 @@ def calculate_probability_of_multicoincidence(ambient_size: int=0,
         ambient_size = ambient_size,
     )
     return initial_choices * covers_of_remaining / all_configurations
+
+def coincidencetest(incidence_statistic, frequencies, number_samples,
+                    format_p_value: bool=True):
+    """
+    Parameters
+    ----------
+    incidence_statistic : int
+        The observed incidence statistic, i.e. the number of samples positive for
+        all features.
+    frequencies : tuple
+        The integer number of positive samples for each respective feature.
+    number_samples : int
+        The total number of samples.
+    format_p_value : bool
+        Default True. If True, reduces the number of significant figures of the
+        p-value to 4, for readability.
+
+    Returns
+    -------
+    p_value : float
+        The probability that the incidence statistic is greater than or equal to the
+        given one, among all configurations with the given number of positive
+        samples for each feature.
+    """
+    if not isinstance(incidence_statistic, int):
+        raise TypeError('incidence_statistic must be int.')
+    if not isinstance(number_samples, int):
+        raise TypeError('number_samples must be int.')
+
+    set_sizes = tuple(frequencies)
+    ambient_size = number_samples
+    if incidence_statistic > min(set_sizes):
+        raise ValueError(
+            'Incidence statistic not possible with these positivity frequencies.'
+        )
+    intersection_cases = [
+        (i, set_sizes, ambient_size)
+        for i in range(incidence_statistic, min(set_sizes) + 1)
+    ]
+    probabilities = {
+        intersection_size :
+        calculate_probability_of_multicoincidence(
+            intersection_size = intersection_size,
+            set_sizes = set_sizes,
+            ambient_size = ambient_size,
+        )
+        for intersection_size, set_sizes, ambient_size in intersection_cases
+    }
+    total = sum(probabilities.values())
+    if format_p_value:
+        return reduce_digits_p_value(total)
+    else:
+        return total
+
+def reduce_digits_p_value(p_value):
+    """
+    Parameters
+    ----------
+    p_value : float
+        A p-value to format for easier reading.
+
+    Returns
+    -------
+    p_value : float
+        The same value, but with the number of significant figures reduced to 4.
+        The string formatting for floats takes care of shortening the string
+        representation using the exponent notation, when the number of digits would
+        be large due to the number being very small.
+    """
+    precision = 4
+    return round(p_value, precision-int(floor(log10(abs(p_value))))-1)

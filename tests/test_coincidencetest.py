@@ -1,9 +1,8 @@
-from decimal import Decimal
-
 import coincidencetest
 from coincidencetest._coincidencetest import compute_number_of_covers
 from coincidencetest._coincidencetest import stirling_second_kind
-from coincidencetest import calculate_probability_of_multicoincidence
+from coincidencetest._coincidencetest import calculate_probability_of_multicoincidence
+from coincidencetest import coincidencetest
 
 
 class TestCoverCounting:
@@ -120,25 +119,34 @@ class TestExactProbabilityCalc:
         ]
         outputs = {
             intersection_size :
-            Decimal(calculate_probability_of_multicoincidence(
+            calculate_probability_of_multicoincidence(
                 intersection_size = intersection_size,
                 set_sizes = set_sizes,
                 ambient_size = ambient_size,
-            ))
+            )
             for intersection_size, set_sizes, ambient_size in intersection_cases
         }
-        t = sum(outputs.values())
+        total = sum(outputs.values())
         cdf = [
-            t - sum([outputs[j] for j in range(0, i)]) for i in range(len(outputs))
+            total - sum([outputs[j] for j in range(0, i)]) for i in range(len(outputs))
         ]
-        return outputs, cdf
+        return outputs, cdf # Needs assert
 
     @staticmethod
     def test_exact_probability_of_intersection():
         for set_sizes, ambient_size in TestExactProbabilityCalc.sample_cases:
             TestExactProbabilityCalc.do_test(set_sizes, ambient_size)
 
-if __name__ == '__main__':
-    outputs, cdf = TestExactProbabilityCalc.do_test((10, 10, 10), 100)
-    print(outputs)
-    print(cdf)
+
+class TestStatisticalSignificanceTest:
+    sample_cases = {
+        ((1, (2, 2, 2), 10)) : 0.07951,
+    }
+
+    @staticmethod
+    def test_p_values():
+        cases = TestStatisticalSignificanceTest.sample_cases
+        for (incidence_statistic, frequencies, number_samples), p_expected in cases.items():
+            p = coincidencetest(incidence_statistic, frequencies, number_samples)
+            assert(p == p_expected)
+

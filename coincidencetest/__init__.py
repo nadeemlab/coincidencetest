@@ -1,3 +1,3 @@
 import math
 
-from ._coincidencetest import calculate_probability_of_multicoincidence
+from ._coincidencetest import coincidencetest
