@@ -220,7 +220,7 @@ def powerset(set_size):
 
 def reduce_set_sizes(set_sizes: tuple=(), which: list=[]):
     """
-    Convience function to decrement specific members of a tuple of integers.
+    Convenience function to decrement specific members of a tuple of integers.
 
     Parameters
     ----------
@@ -239,3 +239,59 @@ def reduce_set_sizes(set_sizes: tuple=(), which: list=[]):
     ]
     return tuple(s for s in new_sizes if s > 0)
 
+def count_all_configurations(set_sizes: tuple=(), ambient_size: int=0):
+    """
+    Computes the number of all configurations of subsets of a set of a given size,
+    the subsets being of prescribed sizes.
+
+    Parameters
+    ----------
+    set_sizes : tuple
+        The prescribed integer sizes.
+    ambient_size : int
+        The size of the ambient set.
+
+    Returns
+    -------
+    count : int
+        The count
+    """
+    return math.prod([binom(ambient_size, size) for size in set_sizes])
+
+def calculate_probability_of_multicoincidence(ambient_size: int=0,
+                                              set_sizes: tuple=(),
+                                              intersection_size: int=0):
+    """
+    Calculates the probability that subsets of a set of a given size, themselves of
+    prescribed sizes, have mutual intersection of a given cardinality.
+
+    Parameters
+    ----------
+    ambient_size : int
+        The size of the ambient set.
+    set_sizes : tuple
+        The integer sizes of some subsets.
+    intersection_size : int
+        The size of the intersection of the subsets.
+
+    Returns
+    -------
+    probability : float
+        The probability. Calculated as the number of configurations with the given
+        intersection size, divided by the number of all configurations.
+    """
+    reduced_sizes = [size - intersection_size for size in set_sizes]
+    if any([size < 0 for size in reduced_sizes]):
+        raise ValueError('Intersection size %s is not possible.', intersection_size)
+
+    initial_choices = binom(ambient_size=ambient_size, subset_size=intersection_size)
+    reduced_ambient_size = ambient_size - intersection_size
+    covers_of_remaining = compute_number_of_covers(
+        set_sizes = tuple(reduced_ambient_size - size for size in reduced_sizes),
+        ambient_size = reduced_ambient_size,
+    )
+    all_configurations = count_all_configurations(
+        set_sizes = set_sizes,
+        ambient_size = ambient_size,
+    )
+    return initial_choices * covers_of_remaining / all_configurations

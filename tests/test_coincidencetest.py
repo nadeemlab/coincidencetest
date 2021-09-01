@@ -1,6 +1,9 @@
+from decimal import Decimal
+
 import coincidencetest
 from coincidencetest._coincidencetest import compute_number_of_covers
 from coincidencetest._coincidencetest import stirling_second_kind
+from coincidencetest._coincidencetest import calculate_probability_of_multicoincidence
 
 
 class TestCoverCounting:
@@ -100,4 +103,52 @@ class TestStirlingNumberCalc:
                 number_parts=number_parts,
                 normalized=True,
             ) == value)
+
+
+
+
+
+class TestExactProbabilityCalc:
+    sample_cases = [
+        ((3, 3, 3), 5),
+        ((3, 4, 5), 7),
+        ((5, 7, 10), 20),
+        ((5, 5, 5), 80),
+        ((10, 10, 10), 100),    
+    ]
+
+    def test_exact_probability_of_intersection(
+        set_sizes: tuple=(),
+        ambient_size: int=0,
+    ):
+        for set_sizes, ambient_size in TestExactProbabilityCalc.samples_cases.items():
+            intersection_cases = [
+                (i, set_sizes, ambient_size) for i in range(min(set_sizes) + 1)
+            ]
+            outputs = {
+                intersection_size :
+                Decimal(calculate_probability_of_multicoincidence(
+                    intersection_size = intersection_size,
+                    set_sizes = set_sizes,
+                    ambient_size = ambient_size,
+                ))
+                for intersection_size, set_sizes, ambient_size in intersection_cases
+            }
+            t = sum(outputs.values())
+            cdf = [
+                t - sum([outputs[j] for j in range(0, i)]) for i in range(len(outputs))
+            ]
+
+        # print('For')
+        # print('subset sizes = ' + str(set_sizes))
+        # print('ambient set size = ' + str(ambient_size))
+        # print('the distribution of the coincidence degree test statistic is:')
+        # print('')
+        # print('\n'.join(str(i) + ' : ' + str(p) for i, p in outputs.items()))
+        # print('')
+        # print('Total probability: ' + str(t))
+        # print('')
+        # print('CDF:')
+        # print('\n'.join([str(i) + ' : ' + str(cdf[i]) for i in range(len(cdf))]))
+        # print('')
 

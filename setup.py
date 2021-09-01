@@ -26,7 +26,6 @@ setuptools.setup(
     long_description_content_type='text/markdown',
     packages=[
         'coincidencetest',
-        'coincidencetest/algorithms',
     ],
     classifiers=[
         'Programming Language :: Python :: 3',
