@@ -92,7 +92,7 @@ class TestStirlingNumberCalc:
         cases = {
             (8, 4) : 1701,
             (10, 3) : 9330,
-            (10, 7) : 588,
+            (10, 7) : 5880,
         }
         for (ambient_size, number_parts), value in cases.items():
             assert(stirling_second_kind(

@@ -173,7 +173,10 @@ def stirling_second_kind(ambient_size: int=0, number_parts: int=0,
         sign(i) * binom(number_parts, i) * pow(number_parts - i, ambient_size)
         for i in range(number_parts + 1)
     ]
-    return sum(terms)
+    if normalized:
+        return sum(terms) // factorial(number_parts)
+    else:
+        return sum(terms)
 
 def number_of_surjective_functions(source_size: int=0, target_size: int=0):
     """
