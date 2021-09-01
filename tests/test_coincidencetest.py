@@ -110,28 +110,35 @@ class TestExactProbabilityCalc:
         ((3, 4, 5), 7),
         ((5, 7, 10), 20),
         ((5, 5, 5), 80),
-        ((10, 10, 10), 100),    
+        ((10, 10, 10), 100),
     ]
 
-    def test_exact_probability_of_intersection(
-        set_sizes: tuple=(),
-        ambient_size: int=0,
-    ):
-        for set_sizes, ambient_size in TestExactProbabilityCalc.sample_cases:
-            intersection_cases = [
-                (i, set_sizes, ambient_size) for i in range(min(set_sizes) + 1)
-            ]
-            outputs = {
-                intersection_size :
-                Decimal(calculate_probability_of_multicoincidence(
-                    intersection_size = intersection_size,
-                    set_sizes = set_sizes,
-                    ambient_size = ambient_size,
-                ))
-                for intersection_size, set_sizes, ambient_size in intersection_cases
-            }
-            t = sum(outputs.values())
-            cdf = [
-                t - sum([outputs[j] for j in range(0, i)]) for i in range(len(outputs))
-            ]
+    @staticmethod
+    def do_test(set_sizes, ambient_size):
+        intersection_cases = [
+            (i, set_sizes, ambient_size) for i in range(min(set_sizes) + 1)
+        ]
+        outputs = {
+            intersection_size :
+            Decimal(calculate_probability_of_multicoincidence(
+                intersection_size = intersection_size,
+                set_sizes = set_sizes,
+                ambient_size = ambient_size,
+            ))
+            for intersection_size, set_sizes, ambient_size in intersection_cases
+        }
+        t = sum(outputs.values())
+        cdf = [
+            t - sum([outputs[j] for j in range(0, i)]) for i in range(len(outputs))
+        ]
+        return outputs, cdf
 
+    @staticmethod
+    def test_exact_probability_of_intersection():
+        for set_sizes, ambient_size in TestExactProbabilityCalc.sample_cases:
+            TestExactProbabilityCalc.do_test(set_sizes, ambient_size)
+
+if __name__ == '__main__':
+    outputs, cdf = TestExactProbabilityCalc.do_test((10, 10, 10), 100)
+    print(outputs)
+    print(cdf)
