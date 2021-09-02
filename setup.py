@@ -9,7 +9,9 @@ def get_file_contents(filename):
     return contents
 
 long_description = get_file_contents('README.md')
-requirements = []
+requirements = [
+    'pandas==1.3.2',
+]
 version = get_file_contents(join('coincidencetest', 'version.txt'))
 
 setuptools.setup(
