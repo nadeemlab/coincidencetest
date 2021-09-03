@@ -1,0 +1,129 @@
+#!/usr/bin/env python3
+import argparse
+
+import pandas as pd
+
+import coincidencetest
+from coincidencetest import find_concepts
+from coincidencetest import coincidencetest
+
+def gather_data(data, closed_sets, dual_sets):
+    sums = data.apply(lambda row : sum(row), axis=0)
+    gathered = {
+        'number of samples' : data.shape[0],
+        'number of features' : data.shape[1],
+        'frequencies' : dict(sums),
+        'groups' : [{
+                'signature' : closed_sets[i],
+                'number of samples' : len(dual_sets[i]),
+            } for i in range(len(closed_sets)) if len(closed_sets[i]) > 1
+        ],
+    }
+    return gathered
+
+def create_html_report(gathered):
+    return '<html>\n</html>\n'
+
+def do_tests(gathered):
+    frequencies = gathered['frequencies']
+    rows = []
+    for item in gathered['groups']:
+        p_value = coincidencetest(
+            item['number of samples'],
+            [frequencies[feature] for feature in item['signature']],
+            gathered['number of samples'],
+            correction_feature_set_size=gathered['number of features'],
+        )
+        rows.append({
+            'Signature' : '; '.join(sorted(item['signature'])),
+            'Frequency' : item['number of samples'],
+            'Out of' : gathered['number of samples'],
+            'p-value' : p_value,
+        })
+        print('Tested %s: %s' % ('; '.join(sorted(item['signature'])), p_value))
+
+    table = pd.DataFrame(rows)
+    table.sort_values(by='p-value', inplace=True)
+    return table
+
+if __name__=='__main__':
+    parser = argparse.ArgumentParser(
+        description = ''.join([
+            'This program computes "formal concepts" (maximal biclusters) in ',
+            'binary feature data, assesses them using the exact test for ',
+            'coincidence, and reports the results.',
+        ])
+    )
+    parser.add_argument(
+        '--input-filename',
+        dest='input_filename',
+        type=str,
+        required=True,
+        help='CSV or TSV file containing a binary matrix with row and column names included.',
+    )
+    parser.add_argument(
+        '--delimiter',
+        type=str,
+        default='tab',
+        help='Either a comma (the character ,) or the word tab. Default is tab.',
+    )
+    parser.add_argument(
+        '--ignore-rownames',
+        dest='ignore_rownames',
+        type=bool,
+        default=False,
+        help='If True, reindex the rows by integers and ignore the provided rownames.',
+    )
+    parser.add_argument(
+        '--level-limit',
+        dest='level_limit',
+        type=int,
+        default=None,
+        help='Per-level limit on considered pairs for bicluster discovery algorithm. See documentation for ConceptLattice.',
+    )
+    parser.add_argument(
+        '--max-recursion',
+        dest='max_recursion',
+        type=int,
+        default=None,
+        help='Limit on number of recursion levels for bicluster discovery algorithm. See documentation for ConceptLattice.',
+    )
+    parser.add_argument(
+        '--output-html',
+        dest='output_html',
+        type=str,
+        default=None,
+        help='If provided, used as output filename for HTML report.'
+    )
+    parser.add_argument(
+        '--output-tsv',
+        dest='output_tsv',
+        type=str,
+        default=None,
+        help='If provided, used as output filename for table of discovered signatures.'
+    )
+    args = parser.parse_args()
+
+    delimiter = args.delimiter
+    if delimiter == 'tab':
+        delimiter = '\t'
+    data = pd.read_csv(args.input_filename, delimiter=delimiter)
+    if args.ignore_rownames:
+        data.drop(labels=data.columns[0], axis=1, inplace=True)
+    else:
+        data.set_index(keys=data.columns[0], inplace=True)
+    closed_sets, dual_sets = find_concepts(data)
+    gathered = gather_data(data, closed_sets, dual_sets)
+
+    if args.output_html is not None:
+        html = create_html_report(gathered)
+        with open(args.output_html, 'w') as file:
+            file.write(html)
+    
+    if args.output_tsv is not None:
+        table = do_tests(gathered)
+        table.to_csv(args.output_tsv, sep='\t', index=False)
+
+    if args.output_html is None and args.output_tsv is None:
+        print('Warning: Use either output-tsv or output-html or both.')
+
