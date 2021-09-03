@@ -25,6 +25,7 @@ setuptools.setup(
     packages=[
         'coincidencetest',
     ],
+    scripts=['scripts/coincidence-clustering'],
     classifiers=[
         'Programming Language :: Python :: 3',
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',

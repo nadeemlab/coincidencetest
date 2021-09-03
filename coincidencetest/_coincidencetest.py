@@ -152,7 +152,8 @@ def calculate_probability_of_multicoincidence(ambient_size: int=0,
     return initial_choices * covers_of_remaining / all_configurations
 
 def coincidencetest(incidence_statistic, frequencies, number_samples,
-                    format_p_value: bool=True):
+                    format_p_value: bool=True,
+                    correction_feature_set_size: int=None):
     """
     Parameters
     ----------
@@ -166,6 +167,10 @@ def coincidencetest(incidence_statistic, frequencies, number_samples,
     format_p_value : bool
         Default True. If True, reduces the number of significant figures of the
         p-value to 4, for readability.
+    correction_feature_set_size : int
+        Default None. If provided, performs p-value correction for multiple testing
+        by multiplying by the number of subsets of the full set of features
+        (which are `correction_feature_set_size` in number) of the given size.
 
     Returns
     -------
@@ -199,6 +204,10 @@ def coincidencetest(incidence_statistic, frequencies, number_samples,
         for intersection_size, set_sizes, ambient_size in intersection_cases
     }
     total = sum(probabilities.values())
+    if correction_feature_set_size:
+        total = total * binom(correction_feature_set_size, len(set_sizes))
+        if total > 1.0:
+            total = 1.0
     if format_p_value:
         return reduce_digits_p_value(total)
     return total
