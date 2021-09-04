@@ -4,22 +4,18 @@ h1, h2, h3 {
     margin: 0;
 }
 h1 {
-    background-color: #3B6AC0;
-    color: white;
+    background-color: #a4d6f6;
 }
 h2 {
-    background-color: #78A7FF;
+    background-color: #c5e8ff;
 }
 h3 {
-    background-color: #fffade;
+    background-color: #e9f6ff;
 }
 body {
     font-family: sans-serif;
     padding: 10px 3% 10px 3%;
 }
-/*p {
-    padding: 10px 5% 10px 5%;
-}*/
 table {
     margin: auto;
     border-spacing: 0px;
@@ -30,7 +26,7 @@ table {
     border: 1px solid gray;
 }
 tr {
-    background-color: f7fbff;
+    background-color: #e9f6ff;
 }
 td, th {
     font-family: sans-serif;
@@ -38,14 +34,52 @@ td, th {
     padding: 10px;
 }
 
+.fileformcontainer {
+    padding: 10px;
+}
+
+.fileformcontainer table, .fileformcontainer table td {
+    background-color: #D6F3F8;
+}
+
+.fileformcontainer table{
+    padding: 15px;
+    border-radius: 20px;
+}
+
+.fileformcontainer table td {
+    text-align: left;
+    /*padding: 5px;*/
+}
+
 .fileform {
     display: inline;
-    text-align:  center;
 }
 
 .fileformtext {
-    background-color: #D6F3F8;
-    font-size: 1.5em;
-    padding: 15px;
-    border-radius: 20px;
+}
+
+.question-icon {
+    content: url('data: image/svg+xml;base64,{{question-icon-base64}}');
+    width: 15px;
+}
+
+#progressarea {
+    text-align: center;
+}
+
+.loader-icon {
+    content: url('data: image/svg+xml;base64,{{loader-icon-base64}}');
+}
+
+#progressmessage {
+    color: red;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline dotted;
 }

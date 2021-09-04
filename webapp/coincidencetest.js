@@ -10,8 +10,14 @@ function setup(){
     // const input = document.querySelector('input[type="file"]');
     // const file = input.files[0];
     // input = document.getElementById('uploadbutton')
+    document.getElementById('progressarea').hidden = false
     input = document.getElementById('uploadbutton')
     readImage(input)
+
+    setTimeout(function(){
+      document.getElementById('progressarea').hidden = true
+    }, 2000);
+    
   }
    
   function readImage(input) {

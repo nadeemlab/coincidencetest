@@ -1,20 +1,42 @@
+<!DOCTYPE html>
 <html>
 <head>
-<link rel="stylesheet" href="style.css">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<style>
+{{style.css}}
+</style>
 <script src="coincidencetest.js"></script>
+
 </head>
 <body onload="setup()">
+<p style="font-size: 0.9em;">back to <a href="https://nadeemlab.org/">Nadeem lab</a></p>
 <h1>Signature discovery and assessment</h1>
 <h2>Exact test for coincidence</h2>
-<p>
-Upload a tab-separated file containing binary feature data, with column/feature names, but no row/sample names.
-</p>
-<div class='fileform'>
-<form id='formid'> 
-    <input id='uploadbutton' class='fileformtext' type='file'/>
-</form>
+
+<div class="fileformcontainer">
+<table>
+<tr>
+    <td>
+        <form class='fileform'> 
+            <input id='uploadbutton' class='fileformtext' type='file'/>
+        </form>
+    </td>
+    <td>
+        <a href="multiplexed_1500.tsv" download>Download example TSV</a>
+    </td>
+    <td>
+        <img class="question-icon" alt="help text" title="A tab-separated file containing binary feature data, with column/feature names, but without row/sample names"/>
+    </td>
+</tr>
+</table>
 </div>
+<div id="progressarea" hidden>
+    <br><br>
+    <img class="loader-icon" alt="help text" title="Calculating..."/>
+    <br>
+    <span id="progressmessage"></span>
 <br>
+</div>
 <br>
 <table>
     <tr>
