@@ -1,0 +1,51 @@
+h1, h2, h3 {
+    text-align: center;
+    padding: 10px;
+    margin: 0;
+}
+h1 {
+    background-color: #3B6AC0;
+    color: white;
+}
+h2 {
+    background-color: #78A7FF;
+}
+h3 {
+    background-color: #fffade;
+}
+body {
+    font-family: sans-serif;
+    padding: 10px 3% 10px 3%;
+}
+/*p {
+    padding: 10px 5% 10px 5%;
+}*/
+table {
+    margin: auto;
+    border-spacing: 0px;
+}
+.headerrow th {
+    background-color: azure;
+    text-align: center;
+    border: 1px solid gray;
+}
+tr {
+    background-color: f7fbff;
+}
+td, th {
+    font-family: sans-serif;
+    text-align: left;
+    padding: 10px;
+}
+
+.fileform {
+    display: inline;
+    text-align:  center;
+}
+
+.fileformtext {
+    background-color: #D6F3F8;
+    font-size: 1.5em;
+    padding: 15px;
+    border-radius: 20px;
+}
