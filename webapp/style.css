@@ -16,7 +16,7 @@ body {
     font-family: sans-serif;
     padding: 10px 3% 10px 3%;
 }
-table {
+/*table {
     margin: auto;
     border-spacing: 0px;
 }
@@ -32,25 +32,38 @@ td, th {
     font-family: sans-serif;
     text-align: left;
     padding: 10px;
+}*/
+
+th {
+    text-align: center;
+    border-bottom: dotted gray 1px;
+    font-size: 1.1em;
+}
+
+th, td {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline dotted;
 }
 
 .fileformcontainer {
     padding: 10px;
 }
 
-.fileformcontainer table, .fileformcontainer table td {
-    background-color: #D6F3F8;
-}
-
-.fileformcontainer table{
+table{
+    background-color: #f1fbfc;
+    margin: auto;
     padding: 15px;
     border-radius: 20px;
 }
 
-.fileformcontainer table td {
-    text-align: left;
-    /*padding: 5px;*/
-}
 
 .fileform {
     display: inline;
@@ -72,14 +85,14 @@ td, th {
     content: url('data: image/svg+xml;base64,{{loader-icon-base64}}');
 }
 
-#progressmessage {
-    color: red;
-}
-
-a {
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline dotted;
+.tooltip {
+    position: absolute;
+    margin: 0px 25px 0px 5px;
+    padding: 5px;
+    border-radius: 5px;
+    border-width: 1px;
+    border-color: gray;
+    border-style: dotted;
+    background: rgb(254, 251, 239, 0.4);
+    font-size: 0.9em;
 }

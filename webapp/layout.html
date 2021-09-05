@@ -5,8 +5,8 @@
 <style>
 {{style.css}}
 </style>
+<script src="fca.js"></script>
 <script src="coincidencetest.js"></script>
-
 </head>
 <body onload="setup()">
 <p style="font-size: 0.9em;">back to <a href="https://nadeemlab.org/">Nadeem lab</a></p>
@@ -25,33 +25,22 @@
         <a href="multiplexed_1500.tsv" download>Download example TSV</a>
     </td>
     <td>
-        <img class="question-icon" alt="help text" title="A tab-separated file containing binary feature data, with column/feature names, but without row/sample names"/>
+        <div onmouseenter="show_tooltip(this)" onmouseleave="unshow_tooltip(this)">
+        <img class="question-icon" alt="help text"/><span class="tooltip" hidden>A tab-separated file containing binary feature data, with column (feature) names, but <i>without</i> row (sample) names</span>
+        </div>
     </td>
 </tr>
 </table>
 </div>
+
+<div id="resultsarea"></div>
+
 <div id="progressarea" hidden>
     <br><br>
     <img class="loader-icon" alt="help text" title="Calculating..."/>
-    <br>
-    <span id="progressmessage"></span>
 <br>
 </div>
+
 <br>
-<table>
-    <tr>
-        <th>A</th>
-        <th>B</th>
-    </tr>
-    <tr>
-        <td>a</td>
-        <td>b</td>
-    </tr>
-    <tr>
-        <td>c</td>
-        <td>d</td>
-    </tr>
-</table>
-<div id="area"></div>
 </body>
 </html>
