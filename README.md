@@ -15,9 +15,8 @@ This example shows that the probability is about 0.09% that four features, each 
 
 The example `coincidencetest(1, [5, 3, 7], 100)` yields p=0.01047, showing that the probability of *any* sample having all features can be very low, provided that enough of the features are individually relatively rare.
 
-## Application
-
-To make the test useful, this package is distributed together with a lightweight "Formal Concept Analysis"-based feature set discovery tool.
+## CLI application
+To make the test useful, this package is distributed together with a lightweight "Formal Concept Analysis" feature set discovery tool.
 
 The installed package exposes the command-line program `coincidence-clustering`. Use it like so:
 ```bash
@@ -50,6 +49,19 @@ The contents of `out_1500.csv`:
 |CD8 FOXP3             |3        |1500  |1.0      |
 |CD3 CD8 PDL1          |1        |1500  |1.0      |
 |CD8 CK                |24       |1500  |1.0      |
+
+
+## Web application
+A Javascript port of the signature discovery and testing program is located in `webapp/`. To run it locally, use:
+
+```bash
+cd webapp/
+chmod +x build.py
+./build.py
+python -m http.server 8080
+```
+
+Then open your browser to `localhost:8080` or `0.0.0.0:8080`.
 
 
 ## Code testing
