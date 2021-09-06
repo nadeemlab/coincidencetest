@@ -35,12 +35,11 @@ def do_tests(gathered):
             correction_feature_set_size=gathered['number of features'],
         )
         rows.append({
-            'Signature' : '; '.join(sorted(item['signature'])),
+            'Signature' : ' '.join(sorted(item['signature'])),
             'Frequency' : item['number of samples'],
             'Out of' : gathered['number of samples'],
             'p-value' : p_value,
         })
-        print('Tested %s: %s' % ('; '.join(sorted(item['signature'])), p_value))
 
     table = pd.DataFrame(rows)
     table.sort_values(by='p-value', inplace=True)
@@ -66,13 +65,6 @@ if __name__=='__main__':
         type=str,
         default='tab',
         help='Either a comma (the character ,) or the word tab. Default is tab.',
-    )
-    parser.add_argument(
-        '--ignore-rownames',
-        dest='ignore_rownames',
-        type=bool,
-        default=False,
-        help='If True, reindex the rows by integers and ignore the provided rownames.',
     )
     parser.add_argument(
         '--level-limit',
@@ -108,10 +100,6 @@ if __name__=='__main__':
     if delimiter == 'tab':
         delimiter = '\t'
     data = pd.read_csv(args.input_filename, delimiter=delimiter)
-    if args.ignore_rownames:
-        data.drop(labels=data.columns[0], axis=1, inplace=True)
-    else:
-        data.set_index(keys=data.columns[0], inplace=True)
     closed_sets, dual_sets = find_concepts(data)
     gathered = gather_data(data, closed_sets, dual_sets)
 
