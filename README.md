@@ -62,6 +62,7 @@ python -m http.server 8080
 
 Then open your browser to `localhost:8080` or `0.0.0.0:8080`.
 
+*Note*: The application only requires the server to have the capability of serving static files, namely the files `index.html` and `worker.js` created by the build process. However, most browsers block the use of the "web workers" from the local file system, so this minimal Python server is needed for local deployment. We use web workers in order to allow dynamic display of feature sets in real-time as they are identified.
 
 ## Code testing
 The package is tested with
