@@ -2,8 +2,7 @@
 This exact test assesses the statistical significance of finding a feature subset in binary feature data such that the number of simultaneously-positive samples is large.
 
 ## Example
-
-Example usage is shown below:
+Usage is shown below:
 ```py
 import coincidencetest
 from coincidencetest import coincidencetest
