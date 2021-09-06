@@ -17,17 +17,6 @@ body {
     padding: 10px 3% 10px 3%;
 }
 
-th {
-    text-align: center;
-    border-bottom: dotted gray 1px;
-    font-size: 1.1em;
-}
-
-th, td {
-    padding-left: 10px;
-    padding-right: 10px;
-}
-
 a {
     text-decoration: none;
 }
@@ -47,6 +36,29 @@ table{
     border-radius: 20px;
 }
 
+th {
+    text-align: center;
+    border-bottom: dotted gray 1px;
+    font-size: 1.1em;
+}
+
+th, td {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+tr.extreme {
+    color: #1ebc2a;
+    font-weight: bold;
+}
+
+tr.significant {
+    color: #858d06;
+}
+
+tr.insignificant {
+    color: #949493;
+}
 
 .fileform {
     display: inline;

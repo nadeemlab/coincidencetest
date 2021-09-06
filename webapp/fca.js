@@ -76,7 +76,7 @@ function get_random_sample(list, size) {
     return Array.from(sampled, (i) => list[i]).sort();
 }
 
-function do_pairwise_closures(closed_sets, dual_sets, computed_pairs, level_limit) {
+function do_pairwise_closures(closed_sets, dual_sets, computed_pairs, level_limit, data) {
     let range = Array(closed_sets.length).fill().map((x,i)=>i)
     let all_pairs = get_all_pairs(range)
     
@@ -111,9 +111,6 @@ function do_pairwise_closures(closed_sets, dual_sets, computed_pairs, level_limi
             if ( !(already_have(c["closed set"], closed_sets)) ) {
                 closed_sets.push(c["closed set"])
                 dual_sets.push(c["dual set"])
-                console.log('Pushing...')
-                console.log(c["closed set"])
-                console.log(" now have " + closed_sets.length)
             }
         }
         computed_pairs.push([index1, index2])
@@ -138,7 +135,7 @@ function find_concepts(data, level_limit, max_recursion) {
     level = 1
     while (true) {
         previous_number_sets = closed_sets.length
-        new_pairs_computed = do_pairwise_closures(closed_sets, dual_sets, computed_pairs, level_limit)
+        new_pairs_computed = do_pairwise_closures(closed_sets, dual_sets, computed_pairs, level_limit, data)
         new_number_sets = closed_sets.length
         if ( previous_number_sets == new_number_sets ) {
             break
@@ -159,17 +156,8 @@ function find_concepts(data, level_limit, max_recursion) {
         return named
     }
 
-    for (let i = 0; i < closed_sets.length; i++) {
-        console.log(closed_sets[i])
-        console.log(closed_sets[i].toString())
-    }
-
     named_signatures = Array.from(closed_sets, (s) => get_named(s, data["header"]))
 
-    for (let i = 0; i < named_signatures.length; i++) {
-        console.log(named_signatures[i])
-        console.log(named_signatures[i].toString())
-    }
     return [named_signatures, dual_sets]
 }
 

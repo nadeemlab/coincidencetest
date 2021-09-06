@@ -2,16 +2,19 @@
 import re
 import base64
 
-layout = open('layout.html').read()
+page = open('layout.html').read()
 
 style_css = open('style.css', 'rt').read()
 page = page.replace('{{style.css}}', style_css)
 
+coincidencetest_js = open('coincidencetest.js', 'rt').read()
+page = page.replace('{{coincidencetest.js}}', coincidencetest_js)
+
 fca_js = open('fca.js', 'rt').read()
 page = page.replace('{{fca.js}}', fca_js)
 
-coincidencetest_js = open('coincidencetest.js', 'rt').read()
-page = page.replace('{{coincidencetest.js}}', coincidencetest_js)
+utilities_js = open('utilities.js', 'rt').read()
+page = page.replace('{{utilities.js}}', utilities_js)
 
 question_mark = open('questionmark.svg', 'rb').read()
 question_mark = str(base64.b64encode(question_mark), 'utf-8')
