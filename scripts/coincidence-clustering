@@ -21,9 +21,6 @@ def gather_data(data, closed_sets, dual_sets):
     }
     return gathered
 
-def create_html_report(gathered):
-    return '<html>\n</html>\n'
-
 def do_tests(gathered):
     frequencies = gathered['frequencies']
     rows = []
@@ -81,17 +78,10 @@ if __name__=='__main__':
         help='Limit on number of recursion levels for bicluster discovery algorithm. See documentation for ConceptLattice.',
     )
     parser.add_argument(
-        '--output-html',
-        dest='output_html',
-        type=str,
-        default=None,
-        help='If provided, used as output filename for HTML report.'
-    )
-    parser.add_argument(
         '--output-tsv',
         dest='output_tsv',
         type=str,
-        default=None,
+        required=True,
         help='If provided, used as output filename for table of discovered signatures.'
     )
     args = parser.parse_args()
@@ -102,16 +92,6 @@ if __name__=='__main__':
     data = pd.read_csv(args.input_filename, delimiter=delimiter)
     closed_sets, dual_sets = find_concepts(data)
     gathered = gather_data(data, closed_sets, dual_sets)
-
-    if args.output_html is not None:
-        html = create_html_report(gathered)
-        with open(args.output_html, 'w') as file:
-            file.write(html)
     
-    if args.output_tsv is not None:
-        table = do_tests(gathered)
-        table.to_csv(args.output_tsv, sep='\t', index=False)
-
-    if args.output_html is None and args.output_tsv is None:
-        print('Warning: Use either output-tsv or output-html or both.')
-
+    table = do_tests(gathered)
+    table.to_csv(args.output_tsv, sep='\t', index=False)
