@@ -4,15 +4,21 @@ import base64
 
 layout = open('layout.html').read()
 
-style_css = open('style.css').read()
-page = re.sub('{{style.css}}', style_css, layout)
+style_css = open('style.css', 'rt').read()
+page = page.replace('{{style.css}}', style_css)
+
+fca_js = open('fca.js', 'rt').read()
+page = page.replace('{{fca.js}}', fca_js)
+
+coincidencetest_js = open('coincidencetest.js', 'rt').read()
+page = page.replace('{{coincidencetest.js}}', coincidencetest_js)
 
 question_mark = open('questionmark.svg', 'rb').read()
 question_mark = str(base64.b64encode(question_mark), 'utf-8')
-page = re.sub('{{question-icon-base64}}', question_mark, page)
+page = page.replace('{{question-icon-base64}}', question_mark)
 
 loader = open('loader.svg', 'rb').read()
 loader = str(base64.b64encode(loader), 'utf-8')
-page = re.sub('{{loader-icon-base64}}', loader, page)
+page = page.replace('{{loader-icon-base64}}', loader)
 
 open('index.html', 'w').write(page)

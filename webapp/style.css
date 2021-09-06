@@ -16,23 +16,6 @@ body {
     font-family: sans-serif;
     padding: 10px 3% 10px 3%;
 }
-/*table {
-    margin: auto;
-    border-spacing: 0px;
-}
-.headerrow th {
-    background-color: azure;
-    text-align: center;
-    border: 1px solid gray;
-}
-tr {
-    background-color: #e9f6ff;
-}
-td, th {
-    font-family: sans-serif;
-    text-align: left;
-    padding: 10px;
-}*/
 
 th {
     text-align: center;

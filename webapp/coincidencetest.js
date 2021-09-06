@@ -14,7 +14,7 @@ function unshow_tooltip(element) {
     last_child.hidden = true
 }
 
-var obj_csv = {
+var tsv_object = {
     size : 0,
     dataFile : [],
     data : null,
@@ -29,11 +29,10 @@ function read_csv(input) {
     if (input.files && input.files[0]) {
         let reader = new FileReader();
         reader.readAsBinaryString(input.files[0]);
-        reader.onload = function (e) {
-            obj_csv.size = e.total;
-            obj_csv.dataFile = e.target.result
-            parsed = parse_table(obj_csv.dataFile)
-            // document.getElementById('area').innerHTML = create_html_table(parsed)
+        reader.onload = function (event) {
+            tsv_object.size = event.total;
+            tsv_object.dataFile = event.target.result
+            parsed = parse_table(tsv_object.dataFile)
             data = {
                 "header" : parsed[0],
                 "samples" : parsed.slice(1),
@@ -57,7 +56,7 @@ function read_csv(input) {
             p0 = "<table><tr>" + "<th>" + table_header.join("</th><th>") + "</th></tr>"
             p1 = ""
             for (let k = 0; k < table_rows.length; k++) {
-                p1 += "<tr><td>" + table_rows[k].join("</td><td>") + "</td></tr>\n"
+                p1 += "<tr><td>" + table_rows[k].join("</td><td>") + '</td></tr>\n'
             }
             p2 = "</table>"
             document.getElementById('resultsarea').innerHTML = p0 + p1 + p2
@@ -81,9 +80,9 @@ function nested_list_transpose(nested_list) {
 }
 
 function parse_table(text){
-    let csv_data = []
+    let rows = []
     let lines = text.trim().split('\n')
-    csv_data.push(lines[0].split('\t'))
+    rows.push(lines[0].split('\t'))
     for (let i = 1; i < lines.length; i++) {
         let row = []
         splitted = lines[i].split('\t')
@@ -92,32 +91,10 @@ function parse_table(text){
                 row.push(parseInt(splitted[j]))
             }
             else {
-                row.push(splitted[j])
+                console.warn("Table data should be binary, '1' or '0'.")
             }
         }
-        csv_data.push(row)
+        rows.push(row)
     }
-    return csv_data
-}
-
-function create_html_table(data) {
-    txt = ""
-    txt += "<table>"
-    txt += "<tr>"
-    for (let j = 0; j < data[0].length; j++) {
-        txt += "<th>"
-        txt += data[0][j]
-        txt += "</th>"
-    }
-    txt += "</tr>"
-    for (let i = 1; i < data.length; i++) {
-        txt += "<tr>"
-        for (let j=0; j< data[i].length; j++) {
-            txt += "<td>"
-            txt += data[i][j]
-            txt += "</td>"
-        }
-        txt += "</tr>"
-    }
-    return ("Number of lines found: " + (data.length-1) + '\n' + txt)
+    return rows
 }
