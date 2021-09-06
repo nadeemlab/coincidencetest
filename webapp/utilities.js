@@ -68,16 +68,16 @@ function show_signatures() {
         if (o.closed_sets[i].length == 1) {
             continue
         }
-        table_rows.push([o.closed_sets[i].sort().join('; '), o.dual_sets[i].length, o.p_values[i]])
+        table_rows.push([o.closed_sets[i].sort().join(' '), o.dual_sets[i].length, o.p_values[i]])
     }
     console.log(table_rows)
     table_rows.sort(function(row1, row2) {return row1[2] - row2[2]})
     console.log("After sorting...")
     console.log(table_rows)
 
-    table_header = ["Signature", "Frequency (out of " + tsv_object.data["samples"].length + ")", "p-value"]
+    table_header = ["Signature", "Frequency<br>(out of " + tsv_object.data["samples"].length + ")", "p-value"]
 
-    p0 = "<table><tr>" + "<th>" + table_header.join("</th><th>") + "</th></tr>"
+    p0 = '<table class="signaturestable"><tr>' + "<th>" + table_header.join("</th><th>") + "</th></tr>"
     p1 = ""
     for (let k = 0; k < table_rows.length; k++) {
         class_specifier = classify_p_value(table_rows[k][2])

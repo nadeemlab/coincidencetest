@@ -60,6 +60,10 @@ tr.insignificant {
     color: #949493;
 }
 
+table.signaturestable tr:hover {
+    background: #f4f4f4;
+}
+
 .fileform {
     display: inline;
 }
