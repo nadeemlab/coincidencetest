@@ -76,7 +76,7 @@ function get_random_sample(list, size) {
     return Array.from(sampled, (i) => list[i]).sort();
 }
 
-function do_pairwise_closures(closed_sets, dual_sets, computed_pairs, level_limit, data) {
+function do_pairwise_closures(closed_sets, dual_sets, computed_pairs, level_limit, data, single_addition_callback) {
     let range = Array(closed_sets.length).fill().map((x,i)=>i)
     let all_pairs = get_all_pairs(range)
     
@@ -111,13 +111,14 @@ function do_pairwise_closures(closed_sets, dual_sets, computed_pairs, level_limi
             if ( !(already_have(c["closed set"], closed_sets)) ) {
                 closed_sets.push(c["closed set"])
                 dual_sets.push(c["dual set"])
+                single_addition_callback(c)
             }
         }
         computed_pairs.push([index1, index2])
     }
 }
 
-function find_concepts(data, level_limit, max_recursion) {
+function find_concepts(data, level_limit, max_recursion, single_addition_callback) {
     closed_sets = []
     dual_sets = []
 
@@ -128,6 +129,7 @@ function find_concepts(data, level_limit, max_recursion) {
         if ( !(already_have(c["closed set"], closed_sets)) && !(c["dual set"].length == 0) ) {
             closed_sets.push(c["closed set"])
             dual_sets.push(c["dual set"])
+            single_addition_callback(c)
         }
     }
 
@@ -135,7 +137,7 @@ function find_concepts(data, level_limit, max_recursion) {
     level = 1
     while (true) {
         previous_number_sets = closed_sets.length
-        new_pairs_computed = do_pairwise_closures(closed_sets, dual_sets, computed_pairs, level_limit, data)
+        new_pairs_computed = do_pairwise_closures(closed_sets, dual_sets, computed_pairs, level_limit, data, single_addition_callback)
         new_number_sets = closed_sets.length
         if ( previous_number_sets == new_number_sets ) {
             break
@@ -148,16 +150,15 @@ function find_concepts(data, level_limit, max_recursion) {
         level += 1
     }
 
-    function get_named(indices, names) {
-        named = []
-        for (let k = 0; k < indices.length; k++) {
-            named.push(names[indices[k]])
-        }
-        return named
-    }
-
     named_signatures = Array.from(closed_sets, (s) => get_named(s, data["header"]))
 
     return [named_signatures, dual_sets]
 }
 
+function get_named(indices, names) {
+    named = []
+    for (let k = 0; k < indices.length; k++) {
+        named.push(names[indices[k]])
+    }
+    return named
+}

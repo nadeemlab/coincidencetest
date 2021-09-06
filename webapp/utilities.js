@@ -20,9 +20,9 @@ var tsv_object = {
 };
 
 var signatures_object = {
-    closed_sets : null,
-    dual_sets : null,
-    p_values : null,
+    closed_sets : [],
+    dual_sets : [],
+    p_values : [],
     signatures : null,
 }
 
@@ -51,6 +51,18 @@ function do_coincidence_tests() {
     }
 }
 
+function do_one_coincidence_test() {
+    let number_samples = tsv_object.data["samples"].length
+    let number_features = tsv_object.data["features"].length
+    i = signatures_object.closed_sets.length - 1
+    let incidence_statistic = dual_sets[i].length
+    let frequencies = get_frequencies(closed_sets[i])
+    console.log(incidence_statistic + ", " + frequencies + ", " + number_samples)
+    let p = coincidencetest(incidence_statistic, frequencies, number_samples, number_features)
+    console.log("pvalue: " + p)
+    signatures_object.p_values.push(p)
+}
+
 function classify_p_value(p) {
     if (p < 0.01) {
         return ' class="extreme"'
@@ -70,10 +82,7 @@ function show_signatures() {
         }
         table_rows.push([o.closed_sets[i].sort().join(' '), o.dual_sets[i].length, o.p_values[i]])
     }
-    console.log(table_rows)
     table_rows.sort(function(row1, row2) {return row1[2] - row2[2]})
-    console.log("After sorting...")
-    console.log(table_rows)
 
     table_header = ["Signature", "Frequency<br>(out of " + tsv_object.data["samples"].length + ")", "p-value"]
 
@@ -85,7 +94,6 @@ function show_signatures() {
     }
     p2 = "</table>"
     document.getElementById('resultsarea').innerHTML = p0 + p1 + p2
-    signatures_object.signatures = table_rows
 }
 
 function openDialog() {
@@ -101,13 +109,14 @@ function pipeline(event) {
         "samples" : parsed.slice(1),
         "features" : nested_list_transpose(parsed.slice(1)),
     }
-    c = find_concepts(tsv_object.data, null, null)
-    signatures_object.closed_sets = c[0]
-    signatures_object.dual_sets = c[1]
+    single_addition_callback = function(c) {
+        signatures_object.closed_sets.push(get_named(c["closed set"], tsv_object.data["header"]))
+        signatures_object.dual_sets.push(c["dual set"])
+        do_one_coincidence_test()
+        show_signatures()
+    }
 
-    do_coincidence_tests()
-    show_signatures()
-
+    c = find_concepts(tsv_object.data, null, null, single_addition_callback)
     document.getElementById('progressarea').hidden = true
 }
 
