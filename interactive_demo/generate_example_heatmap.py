@@ -99,16 +99,27 @@ def create_html(data):
         text-align: left;
     }
 
-    #pmeter_p {
+    .pmetercontainer {
         border: 1px solid gray;
         width: 180px;
         height: 15px;
+        display: inline-block;
+    }
+
+    #pmeter_p {
+        background: #a6ff97;
+        position: absolute;
+        width: 0px;
+        height: 15px;
+        display: inline-block;
     }
 
     #pmeter_singlep {
-        border: 1px solid gray;
-        width: 180px;
+        background: #a6ff97;
+        position: absolute;
+        width: 0px;
         height: 15px;
+        display: inline-block;
     }
 
     '''
@@ -154,12 +165,14 @@ def create_html(data):
     single_p = str(single_p)[0:9]
     p = str(p)[0:9]
 
-    caption = '<br><p id="captiontext">Among all configurations of 4 binary features with frequencies (<span id="frequencies">' + ', '.join(str(f) for f in frequencies)+ '</span>), the probabilities of the configuration shown above (or more extreme) are given below:<br><div class="tablestatsbounder"><table class="stats"><tr><td>Probability of exactly <span onmouseenter="highlight_intersections()"" onmouseleave="unhighlight_intersections()" class="numintersections">' + str(len(intersections)) + '</span> coincidents</td><td class="pmeter"><canvas id="pmeter_singlep"></span></td><td class="pvals"><span id="singlep">' + str(single_p) + '</span></td></tr><td>Probability of <span class="numintersections" onmouseenter="highlight_intersections()"" onmouseleave="unhighlight_intersections()">' + str(len(intersections)) + '</span> or more coincidents</td><td class="pmeter"><canvas id="pmeter_p"></span></td><td class="pvals"><span id="pvalue">' + str(p) + '</span></td><tr></tr></table></div>'
-
+    hidden = ''
     if 'no-caption' in sys.argv:
-        caption = ''
+        hidden = 'hidden'
 
-    html = '<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><style>' + style + '</style><script>{{coincidencetest.js}}</script><script>{{fig_script.js}}</script></head><body onload="fill_fields(retrieve_data())">' + '<div class="figdiv">' + table + title + caption + '</div></body></html>'
+    caption = '<br><p id="captiontext" ' + hidden + '>The probabilities are defined with respect to all configurations of 4 binary features with the given frequencies (<span id="frequencies">' + ', '.join(str(f) for f in frequencies)+ '</span>).<br>'
+    tablestats = '<div class="tablestatsbounder"><table class="stats"><tr><td>Probability of exactly <span onmouseenter="highlight_intersections()"" onmouseleave="unhighlight_intersections()" class="numintersections">' + str(len(intersections)) + '</span> coincidents</td><td class="pmeter"><span class="pmetercontainer"><span id="pmeter_singlep"></span></span></td><td class="pvals"><span id="singlep">' + str(single_p) + '</span></td></tr><td>Probability of <span class="numintersections" onmouseenter="highlight_intersections()"" onmouseleave="unhighlight_intersections()">' + str(len(intersections)) + '</span> or more coincidents</td><td class="pmeter"><span class="pmetercontainer"><span id="pmeter_p"></span></span></td><td class="pvals"><span id="pvalue">' + str(p) + '</span></td><tr></tr></table></div>'
+
+    html = '<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><style>' + style + '</style><script>{{coincidencetest.js}}</script><script>{{fig_script.js}}</script></head><body onload="fill_fields(retrieve_data())">' + '<div class="figdiv"">' + table + '<br><br>' + tablestats + title + caption  + '</div><p><a id="download_this_page" href="" title="figure.html" download="figure.html" onclick="update_download_link()">Download HTML</a></p></body></html>'
     return html
 
 html = create_html(data)

@@ -84,6 +84,8 @@ function fill_fields(data) {
     document.getElementById("pvalue").innerText = pvalue
 
     draw_p_meters()
+
+    // update_download_link()
 }
 
 function handle_click(element) {
@@ -124,16 +126,19 @@ function unhighlight_intersections() {
 
 function draw_p_meter(element_name, value) {
     var c = document.getElementById(element_name);
-    var ctx = c.getContext("2d");
-    ctx.beginPath()
-    ctx.clearRect(0, 0, c.width, c.height);
-    ctx.lineWidth = "1"
-    ctx.strokeStyle = "#999999"
-    ctx.fillStyle = "#a6ff97"
-    // ctx.fillRect(1, 1, c.width-1, c.height-1);
-    ctx.fillRect(0,0, parseInt(c.width * value), c.height)
-    ctx.rect(-1,0, parseInt(c.width * value), c.height)
-    ctx.stroke();
+    c.style.width = parseInt(180 * value) + 'px'
+    console.log('Element "' + element_name + '"...')
+    console.log('New c.style.width: ' + parseInt(180 * value))
+    // var ctx = c.getContext("2d");
+    // ctx.beginPath()
+    // ctx.clearRect(0, 0, c.width, c.height);
+    // ctx.lineWidth = "1"
+    // ctx.strokeStyle = "#999999"
+    // ctx.fillStyle = "#a6ff97"
+    // // ctx.fillRect(1, 1, c.width-1, c.height-1);
+    // ctx.fillRect(0,0, parseInt(c.width * value), c.height)
+    // ctx.rect(-1,0, parseInt(c.width * value), c.height)
+    // ctx.stroke();
 }
 
 function draw_p_meters() {
@@ -143,4 +148,12 @@ function draw_p_meters() {
     draw_p_meter("pmeter_p", pvalue)
 }
 
-// fill_fields(data_obj.data)
+function update_download_link() {
+    var s = new XMLSerializer();  //Copy document to new object then remove the download link anchor?
+    var str = s.serializeToString(document);
+    base64str = btoa(str)
+    download_link = document.getElementById('download_this_page')
+    download_link.href = 'data: text/html;base64,' + base64str
+    console.log(base64str)
+    return true
+}
