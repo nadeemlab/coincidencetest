@@ -1,6 +1,8 @@
 # coincidencetest
 This exact test assesses the statistical significance of finding a feature subset in binary feature data such that the number of simultaneously-positive samples is large.
 
+Everything needed to perform the test is located in the module [_coincidencetest.py](coincidencetest/_coincidencetest.py).
+
 ## Example
 Usage is shown below:
 ```py
