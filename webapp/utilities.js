@@ -31,13 +31,18 @@ function read_tsv(input) {
 
 function spawn_worker(event) {
     if (typeof(worker) == "undefined") {
-        worker = new Worker("./worker.js");
-        // worker = new Worker(URL.createObjectURL(new Blob([worker_function.toString()], {type: 'text/javascript'})));
-        // worker = new Worker(URL.createObjectURL(new Blob([worker_function.toString()], {type: 'text/javascript'})));
-        console.log('Spawned worker.')
+        worker = new Worker("./worker.js")
         worker.onmessage = onmessage
-        worker.postMessage(event.target.result)
+        console.log('Spawned worker.')
     }
+    saved_time.value = new Date().getTime()
+    document.getElementById('resultsarea').innerHTML = ""
+    document.getElementById('timer').innerHTML = ""
+    worker.postMessage(event.target.result)
+}
+
+var saved_time = {
+    value : null,
 }
 
 function onmessage(event) {
@@ -45,8 +50,12 @@ function onmessage(event) {
 
     if (event.data == "Done with concepts.") {
         document.getElementById('progressarea').hidden = true
-    }
-    else {
+
+        var now = new Date().getTime()
+        var distance = now - saved_time.value
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        document.getElementById('timer').innerHTML = "<br><i>Took " + seconds + " seconds.</i>"
+    } else {
         signatures_object = event.data
         show_signatures(signatures_object)
     }

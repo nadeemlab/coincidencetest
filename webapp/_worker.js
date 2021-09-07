@@ -4,9 +4,8 @@
 
 
 var tsv_object = {
-    size : 0,
     data : null,
-};
+}
 
 var signatures_object = {
     closed_sets : [],
@@ -25,20 +24,6 @@ function get_frequencies(feature_indices) {
     return frequencies
 }
 
-function do_coincidence_tests() {
-    let number_samples = tsv_object.data["samples"].length
-    let number_features = tsv_object.data["features"].length
-    signatures_object.p_values = []
-    for (let i = 0; i < signatures_object.closed_sets.length; i++) {
-        let incidence_statistic = dual_sets[i].length
-        let frequencies = get_frequencies(closed_sets[i])
-        console.log(incidence_statistic + ", " + frequencies + ", " + number_samples)
-        let p = coincidencetest(incidence_statistic, frequencies, number_samples, number_features)
-        console.log("pvalue: " + p)
-        signatures_object.p_values.push(p)
-    }
-}
-
 function do_one_coincidence_test() {
     let number_samples = tsv_object.data["samples"].length
     let number_features = tsv_object.data["features"].length
@@ -52,7 +37,6 @@ function do_one_coincidence_test() {
 }
 
 function pipeline(raw_data) {
-    // tsv_object.size = event.total;
     parsed = parse_table(raw_data)
     tsv_object.data = {
         "header" : parsed[0],
@@ -108,6 +92,16 @@ function parse_table(text){
 }
 
 function worker_onmessage(event) {
+    tsv_object = {
+        data : null,
+    }
+
+    signatures_object = {
+        closed_sets : [],
+        dual_sets : [],
+        p_values : [],
+    }
+
     pipeline(event.data)
 }
 

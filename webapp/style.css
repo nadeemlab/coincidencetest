@@ -95,3 +95,8 @@ table.signaturestable tr:hover {
     background: rgb(254, 251, 239, 0.4);
     font-size: 0.9em;
 }
+
+#timer {
+    margin: auto;
+    text-align: center;
+}
