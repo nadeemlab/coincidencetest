@@ -17,7 +17,7 @@ This example shows that the probability is about 0.09% that four features, each 
 The example `coincidencetest(1, [5, 3, 7], 100)` yields p=0.01047, showing that the probability of *any* sample having all features can be very low, provided that enough of the features are individually relatively rare.
 
 ## CLI application
-To make the test useful, this package is distributed together with a lightweight "Formal Concept Analysis" feature set discovery tool.
+To make the test immediately useful, this package is distributed together with a lightweight "Formal Concept Analysis" feature set discovery tool.
 
 The installed package exposes the command-line program `coincidence-clustering`. Use it like so:
 ```bash
