@@ -170,7 +170,8 @@ def coincidencetest(incidence_statistic, frequencies, number_samples,
     correction_feature_set_size : int
         Default None. If provided, performs p-value correction for multiple testing
         by multiplying by the number of subsets of the full set of features
-        (which are `correction_feature_set_size` in number) of the given size.
+        (which are `correction_feature_set_size` in number) which are the size of
+        the length of `frequencies`.
 
     Returns
     -------
