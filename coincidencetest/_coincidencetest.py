@@ -158,8 +158,8 @@ def coincidencetest(incidence_statistic, frequencies, number_samples,
     Parameters
     ----------
     incidence_statistic : int
-        The observed incidence statistic, i.e. the number of samples positive for
-        all features.
+        The observed incidence statistic, i.e. the number of samples positive
+        simultaneously for all features.
     frequencies : tuple
         The integer number of positive samples for each respective feature.
     number_samples : int
