@@ -4,6 +4,8 @@ This exact test assesses the statistical significance of finding a feature subse
 Everything needed to perform the test is located in the self-contained module [_coincidencetest.py](coincidencetest/_coincidencetest.py). After publication, we plan to submit this code for inclusion in [scipy.stats](https://docs.scipy.org/doc/scipy/reference/stats.html#statistical-tests), alongside for example `ttest_ind`, `mannwhitneyu`, and `kruskal`.
 
 ## Example
+Install as usual with `pip install .` from inside the cloned repository directory.
+
 Usage is shown below:
 ```py
 import coincidencetest
