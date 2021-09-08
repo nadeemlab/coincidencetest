@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import sys
 
 import coincidencetest
 from coincidencetest import coincidencetest
@@ -31,6 +30,9 @@ def create_html(data):
         padding: 15px;
     }
     p.tabletitle {
+        text-align: center;
+    }
+    p {
         text-align: center;
     }
     table.heat {
@@ -122,6 +124,12 @@ def create_html(data):
         display: inline-block;
     }
 
+    a {
+        text-decoration: none;
+    }
+    a:hover {
+        text-decoration: underline;
+    }
     '''
     def wrap(pre, inner, post):
         return pre + inner + post
@@ -157,7 +165,7 @@ def create_html(data):
         '</table>',
     )
     table = wrap('<div class="tableheatbounder">', table, '</div>')
-    title = '<p class="tabletitle"><span id="numfeatures">%s</span> features coinciding along <span class="numintersections" onmouseenter="highlight_intersections()"" onmouseleave="unhighlight_intersections()">%s</span> samples</p>' % (len(data), len(intersections))
+    title = '<p class="tabletitle"><span id="numfeatures">%s</span> features coinciding along <span class="numintersections" onmouseenter="highlight_intersections()" onmouseleave="unhighlight_intersections()">%s</span> samples</p>' % (len(data), len(intersections))
 
     single_p = calculate_probability_of_multicoincidence(len(data[0]), frequencies, len(intersections))
     p = coincidencetest(len(intersections), frequencies, len(data[0]))
@@ -165,14 +173,10 @@ def create_html(data):
     single_p = str(single_p)[0:9]
     p = str(p)[0:9]
 
-    hidden = ''
-    if 'no-caption' in sys.argv:
-        hidden = 'hidden'
+    caption = '<p id="captiontext"><br>The probabilities are defined with respect to all configurations of 4 binary features with the given frequencies (<span id="frequencies">' + ', '.join(str(f) for f in frequencies)+ '</span>).<br></p>'
+    tablestats = '<div class="tablestatsbounder"><table class="stats"><tr><td>Probability of exactly <span onmouseenter="highlight_intersections()" onmouseleave="unhighlight_intersections()" class="numintersections">' + str(len(intersections)) + '</span> coincidents</td><td class="pmeter"><span class="pmetercontainer"><span id="pmeter_singlep"></span></span></td><td class="pvals"><span id="singlep">' + str(single_p) + '</span></td></tr><td>Probability of <span class="numintersections" onmouseenter="highlight_intersections()" onmouseleave="unhighlight_intersections()">' + str(len(intersections)) + '</span> or more coincidents</td><td class="pmeter"><span class="pmetercontainer"><span id="pmeter_p"></span></span></td><td class="pvals"><span id="pvalue">' + str(p) + '</span></td><tr></tr></table></div>'
 
-    caption = '<br><p id="captiontext" ' + hidden + '>The probabilities are defined with respect to all configurations of 4 binary features with the given frequencies (<span id="frequencies">' + ', '.join(str(f) for f in frequencies)+ '</span>).<br>'
-    tablestats = '<div class="tablestatsbounder"><table class="stats"><tr><td>Probability of exactly <span onmouseenter="highlight_intersections()"" onmouseleave="unhighlight_intersections()" class="numintersections">' + str(len(intersections)) + '</span> coincidents</td><td class="pmeter"><span class="pmetercontainer"><span id="pmeter_singlep"></span></span></td><td class="pvals"><span id="singlep">' + str(single_p) + '</span></td></tr><td>Probability of <span class="numintersections" onmouseenter="highlight_intersections()"" onmouseleave="unhighlight_intersections()">' + str(len(intersections)) + '</span> or more coincidents</td><td class="pmeter"><span class="pmetercontainer"><span id="pmeter_p"></span></span></td><td class="pvals"><span id="pvalue">' + str(p) + '</span></td><tr></tr></table></div>'
-
-    html = '<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><style>' + style + '</style><script>{{coincidencetest.js}}</script><script>{{fig_script.js}}</script></head><body onload="fill_fields(retrieve_data())">' + '<div class="figdiv"">' + table + '<br><br>' + tablestats + title + caption  + '</div><p><a id="download_this_page" href="" title="figure.html" download="figure.html" onclick="update_download_link()">Download HTML</a></p></body></html>'
+    html = '<!DOCTYPE html><html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><style>' + style + '</style><script>{{coincidencetest.js}}</script><script>{{fig_script.js}}</script></head><body onload="fill_fields(retrieve_data())">' + '<div class="figdiv">' + table + '<br><br>' + tablestats + title + caption  + '</div><p class="downloadpagecontainer"><a id="download_this_page" onmouseenter="update_download_link()" href="" title="figure.html" download="figure.html"><br>Download HTML</a></p></body></html>'
     return html
 
 html = create_html(data)

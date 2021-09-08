@@ -127,18 +127,6 @@ function unhighlight_intersections() {
 function draw_p_meter(element_name, value) {
     var c = document.getElementById(element_name);
     c.style.width = parseInt(180 * value) + 'px'
-    console.log('Element "' + element_name + '"...')
-    console.log('New c.style.width: ' + parseInt(180 * value))
-    // var ctx = c.getContext("2d");
-    // ctx.beginPath()
-    // ctx.clearRect(0, 0, c.width, c.height);
-    // ctx.lineWidth = "1"
-    // ctx.strokeStyle = "#999999"
-    // ctx.fillStyle = "#a6ff97"
-    // // ctx.fillRect(1, 1, c.width-1, c.height-1);
-    // ctx.fillRect(0,0, parseInt(c.width * value), c.height)
-    // ctx.rect(-1,0, parseInt(c.width * value), c.height)
-    // ctx.stroke();
 }
 
 function draw_p_meters() {
@@ -149,11 +137,16 @@ function draw_p_meters() {
 }
 
 function update_download_link() {
-    var s = new XMLSerializer();  //Copy document to new object then remove the download link anchor?
-    var str = s.serializeToString(document);
-    base64str = btoa(str)
+    var s = new XMLSerializer()
+    document.getElementById('download_this_page').style.visibility = 'hidden'
+    document.getElementById('captiontext').style.visibility = 'hidden'
     download_link = document.getElementById('download_this_page')
+    download_link.href = ""
+    var str = s.serializeToString(document)
+    document.getElementById('download_this_page').style.visibility = 'visible'
+    document.getElementById('captiontext').style.visibility = 'visible'
+    base64str = btoa(str)
     download_link.href = 'data: text/html;base64,' + base64str
     console.log(base64str)
-    return true
+    console.log('Updated download href.')
 }
