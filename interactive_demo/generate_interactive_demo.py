@@ -187,5 +187,5 @@ html = html.replace('{{coincidencetest.js}}', coincidencetest_js)
 fig_script_js = open('fig_script.js', 'rt').read()
 html = html.replace('{{fig_script.js}}', fig_script_js)
 
-open('fig.html', 'wt').write(html)
+open('interactive_demo.html', 'wt').write(html)
 
