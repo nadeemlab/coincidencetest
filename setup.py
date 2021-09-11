@@ -25,7 +25,10 @@ setuptools.setup(
     packages=[
         'coincidencetest',
     ],
-    scripts=['scripts/coincidence-clustering'],
+    scripts=[
+        'scripts/coincidence-clustering',
+        'scripts/coincidencetest-plot'
+    ],
     classifiers=[
         'Programming Language :: Python :: 3',
         'Topic :: Scientific/Engineering',
