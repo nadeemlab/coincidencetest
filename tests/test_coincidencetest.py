@@ -1,3 +1,4 @@
+import time
 from math import factorial
 from itertools import chain
 from itertools import combinations
@@ -185,6 +186,16 @@ class TestCoverCounting:
         ((3, 3, 5, 2), 8),
     ]
 
+    extreme_sample_cases = [
+        [20, [101, 85, 75, 110, 99], 500],
+        [50, [101, 85, 75, 110, 99], 500],
+        [65, [101, 85, 75, 110, 99], 500],
+        [50, [101, 185, 75, 210, 99], 1000],
+        [50, [101, 185, 75, 210, 99], 5000],
+        [50, [101, 185, 75, 210, 99], 10000],
+        [120, [201, 215, 375, 210, 250], 10000],
+    ]
+
     @staticmethod
     def test_manually_validated_cases():
         cases = {
@@ -241,6 +252,60 @@ class TestCoverCounting:
                 strategy = 'recursion',
             )
             assert(covers1 == covers2)
+
+    @staticmethod
+    def test_closed_formula_for_cdf():
+        p_values = []
+        for set_sizes, ambient_size in TestCoverCounting.sample_cases:
+            for I in range(1, min(set_sizes)+1):
+                p1 = coincidencetest(
+                    incidence_statistic = I,
+                    frequencies = set_sizes,
+                    number_samples = ambient_size,
+                    strategy = 'closed-form',
+                    format_p_value = False,
+                )
+                p2 = coincidencetest(
+                    incidence_statistic = I,
+                    frequencies = set_sizes,
+                    number_samples = ambient_size,
+                    strategy = 'sum-distribution',
+                    format_p_value = False,
+                )
+                assert(p1 == p2)
+                p_values.append((p1,p2))
+        return p_values
+
+    @staticmethod
+    def gauge_performance_closed_formula_for_cdf():
+        times = []
+        p_values = []
+        for incidence_statistic, set_sizes, ambient_size in TestCoverCounting.extreme_sample_cases:
+            tic = time.perf_counter()
+            p1 = coincidencetest(
+                incidence_statistic = incidence_statistic,
+                frequencies = set_sizes,
+                number_samples = ambient_size,
+                strategy = 'closed-form',
+                format_p_value = False,
+            )
+            toc = time.perf_counter()
+            time1 = toc - tic
+
+            tic = time.perf_counter()
+            p2 = coincidencetest(
+                incidence_statistic = incidence_statistic,
+                frequencies = set_sizes,
+                number_samples = ambient_size,
+                strategy = 'sum-distribution',
+                format_p_value = False,
+            )
+            toc = time.perf_counter()
+            time2 = toc - tic
+
+            times.append({'closed-form' : time1, 'sum-distribution' : time2, 'ratio' : time2 / time1})
+            p_values.append({'closed-form' : p1,'sum-distribution' : p2})
+        return [times, p_values]
 
 
 class TestStirlingNumberCalc:

@@ -10,6 +10,7 @@ import math
 from math import log10
 from math import floor
 from math import factorial
+from math import prod
 from itertools import combinations
 from itertools import product
 
@@ -33,6 +34,9 @@ def binom(ambient_size: int=0, subset_size: int=0):
     return factorial(ambient_size) //   \
             factorial(subset_size) //   \
             factorial(ambient_size - subset_size)
+
+def sign(x):
+    return 1 if x % 2 == 0 else -1
 
 def compute_number_of_covers(set_sizes: tuple=(), ambient_size: int=0,
                              strategy: str='binomial-formula'):
@@ -74,9 +78,8 @@ def compute_number_of_covers(set_sizes: tuple=(), ambient_size: int=0,
     if strategy == 'binomial-formula':
         N = ambient_size
         n = set_sizes
-        sign = lambda x: 1 if x % 2 == 0 else -1
         terms = [
-            sign(N+m)*binom(N,m)*math.prod([binom(m,n[i]) for i in range(len(n))])
+            sign(N+m)*binom(N,m)*prod([binom(m,n[i]) for i in range(len(n))])
             for m in range(max(n), N + 1)
         ]
         return sum(terms)
@@ -109,9 +112,9 @@ def count_all_configurations(set_sizes: tuple=(), ambient_size: int=0):
     Returns
     -------
     count : int
-        The count
+        The count.
     """
-    return math.prod([binom(ambient_size, size) for size in set_sizes])
+    return prod([binom(ambient_size, size) for size in set_sizes])
 
 def calculate_probability_of_multicoincidence(ambient_size: int=0,
                                               set_sizes: tuple=(),
@@ -151,9 +154,42 @@ def calculate_probability_of_multicoincidence(ambient_size: int=0,
     )
     return initial_choices * covers_of_remaining / all_configurations
 
+def union_bound_count(ambient_size: int=0,
+                      set_sizes: tuple=(),
+                      union_size: int=0):
+    """
+    Computes the number of all configurations of subsets of a set of a given size,
+    the subsets being of prescribed sizes, such that the union has given size
+    *or less*.
+
+    Parameters
+    ----------
+    ambient_size : int
+        The size of the ambient set.
+    set_sizes: tuple
+        The prescibed integer sizes.
+    union_size: int
+        The (inclusive) bound on the union size.
+
+    Returns
+    -------
+    count : int
+        The count.
+    """
+    N = ambient_size
+    v = set_sizes
+    n = union_size
+    return sign(n) * sum([
+        sign(m) * binom(N,m) * binom(N-m-1,N-n-1) * prod([
+            binom(m,vj) for vj in v
+        ])
+        for m in range(max(v), n+1)
+    ])
+
 def coincidencetest(incidence_statistic, frequencies, number_samples,
                     format_p_value: bool=True,
-                    correction_feature_set_size: int=None):
+                    correction_feature_set_size: int=None,
+                    strategy: str='closed-form'):
     """
     Parameters
     ----------
@@ -172,6 +208,13 @@ def coincidencetest(incidence_statistic, frequencies, number_samples,
         by multiplying by the number of subsets of the full set of features
         (which are `correction_feature_set_size` in number) which are the size of
         the length of `frequencies`.
+    strategy : {'closed-form', 'sum-distribution'}, optional
+        Selects the method of computation.
+        The following options are available (default is 'closed-form'):
+          * 'closed-form': The closed formula (single summation).
+          * 'sum-distribution': Sums values of the distribution (i.e. values of the
+            function `calculate_probability_of_multicoincidence`), amounting to a
+            double summation.
 
     Returns
     -------
@@ -191,27 +234,44 @@ def coincidencetest(incidence_statistic, frequencies, number_samples,
         raise ValueError(
             'Incidence statistic not possible with these positivity frequencies.'
         )
-    intersection_cases = [
-        (i, set_sizes, ambient_size)
-        for i in range(incidence_statistic, min(set_sizes) + 1)
-    ]
-    probabilities = {
-        intersection_size :
-        calculate_probability_of_multicoincidence(
-            intersection_size = intersection_size,
+
+    if strategy == 'closed-form':
+        complements = [ambient_size - s for s in set_sizes]
+        configurations = union_bound_count(
+            ambient_size = ambient_size,
+            set_sizes = complements,
+            union_size = ambient_size - incidence_statistic,
+        )
+        all_configurations = count_all_configurations(
             set_sizes = set_sizes,
             ambient_size = ambient_size,
         )
-        for intersection_size, set_sizes, ambient_size in intersection_cases
-    }
-    total = sum(probabilities.values())
-    if correction_feature_set_size:
-        total = total * binom(correction_feature_set_size, len(set_sizes))
-        if total > 1.0:
-            total = 1.0
+        p_value = configurations / all_configurations
+
+    if strategy == 'sum-distribution':
+        intersection_cases = [
+            (i, set_sizes, ambient_size)
+            for i in range(incidence_statistic, min(set_sizes) + 1)
+        ]
+        probabilities = {
+            intersection_size :
+            calculate_probability_of_multicoincidence(
+                intersection_size = intersection_size,
+                set_sizes = set_sizes,
+                ambient_size = ambient_size,
+            )
+            for intersection_size, set_sizes, ambient_size in intersection_cases
+        }
+        total = sum(probabilities.values())
+        if correction_feature_set_size:
+            total = total * binom(correction_feature_set_size, len(set_sizes))
+            if total > 1.0:
+                total = 1.0
+        p_value = total
+
     if format_p_value:
-        return reduce_digits_p_value(total)
-    return total
+        return reduce_digits_p_value(p_value)
+    return p_value
 
 def reduce_digits_p_value(p_value):
     """
