@@ -33,6 +33,8 @@ def binom(ambient_size: int=0, subset_size: int=0):
     """
     if subset_size > ambient_size:
         return 0
+    if subset_size < 0:
+        return 0
     return factorial(ambient_size) //   \
             factorial(subset_size) //   \
             factorial(ambient_size - subset_size)
@@ -142,7 +144,7 @@ def calculate_probability_of_multicoincidence(ambient_size: int=0,
     """
     reduced_sizes = [size - intersection_size for size in set_sizes]
     if any(size < 0 for size in reduced_sizes):
-        raise ValueError('Intersection size %s is not possible.' % intersection_size)
+        return 0
 
     initial_choices = binom(ambient_size=ambient_size, subset_size=intersection_size)
     reduced_ambient_size = ambient_size - intersection_size
@@ -269,9 +271,9 @@ def coincidencetest(incidence_statistic, frequencies, number_samples,
     set_sizes = tuple(frequencies)
     ambient_size = number_samples
     if incidence_statistic > min(set_sizes):
-        raise ValueError(
-            'Incidence statistic not possible with these positivity frequencies.'
-        )
+        return 0
+    # if incidence_statistic < ambient_size - min([ambient_size - s for s in set_sizes]):
+    #     return 1
 
     if strategy == 'closed-form':
         configurations = configurations_bounded_intersection(
