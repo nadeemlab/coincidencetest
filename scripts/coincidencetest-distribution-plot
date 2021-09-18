@@ -62,7 +62,7 @@ df = pd.DataFrame({'probability' : pdf, 'intersection size' : I_values, 'interse
 fig = px.bar(df, x='intersection size', y='probability')
 fig.update_layout(yaxis_range=[0,1])
 fig.update_layout(bargap=0.0)
-fig.add_trace(go.Scatter(y=cdf, x=I_values, mode="lines", line=dict(color = 'rgb(245, 15, 10)', shape='hvh')), row=1, col=1)
+fig.add_trace(go.Scatter(y=cdf, x=I_values, mode="lines", line=dict(color = 'rgb(245, 15, 10)', shape='hvh', width=1)), row=1, col=1)
 fig.update_layout(showlegend=False)
 
 if args.output_filename:
