@@ -83,7 +83,7 @@ if __name__=='__main__':
     }
     table tr td{
         width: 1px;
-        height: 100px;
+        height: 50px;
     }
     td.one {
         background: #f25b24;

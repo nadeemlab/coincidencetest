@@ -277,6 +277,29 @@ class TestCoverCounting:
         return p_values
 
     @staticmethod
+    def test_direct_closed_formula_for_cdf():
+        p_values = []
+        for set_sizes, ambient_size in TestCoverCounting.sample_cases:
+            for I in range(1, min(set_sizes)+1):
+                p1 = coincidencetest(
+                    incidence_statistic = I,
+                    frequencies = set_sizes,
+                    number_samples = ambient_size,
+                    strategy = 'closed-form-covers',
+                    format_p_value = False,
+                )
+                p2 = coincidencetest(
+                    incidence_statistic = I,
+                    frequencies = set_sizes,
+                    number_samples = ambient_size,
+                    strategy = 'sum-distribution',
+                    format_p_value = False,
+                )
+                assert(p1 == p2)
+                p_values.append((p1,p2))
+        return p_values
+
+    @staticmethod
     def gauge_performance_closed_formula_for_cdf():
         times = []
         p_values = []

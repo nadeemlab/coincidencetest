@@ -31,6 +31,8 @@ def binom(ambient_size: int=0, subset_size: int=0):
     coefficient : int
         The value.
     """
+    if subset_size > ambient_size:
+        return 0
     return factorial(ambient_size) //   \
             factorial(subset_size) //   \
             factorial(ambient_size - subset_size)
@@ -186,6 +188,40 @@ def union_bound_count(ambient_size: int=0,
         for m in range(max(v), n+1)
     ])
 
+def configurations_bounded_intersection(ambient_size: int=0,
+                                        set_sizes: list=[],
+                                        intersection_size: int=0):
+    """
+    Computes the number of configurations of subsets of a set of a given size,
+    the subsets being of prescribed sizes, such that the intersection has given
+    size or *more*.
+
+    Parameters
+    ----------
+    ambient_size : int
+        The size of the ambient set.
+    set_sizes : list
+        The prescribed integer sizes.
+    intersection_size : int
+        The (inclusive) lower bound on the size of the mutual intersection.
+
+    Returns
+    -------
+    count : int
+        The number of configurations satisfying the intersection bound.
+    """
+    n = ambient_size
+    v = set_sizes
+    i = intersection_size
+    l = n - min(v)
+    u = n - i
+    return sum([
+        sign(m) * binom(n,m) * ( sign(l) * binom(n-m-1,n-l) + sign(n-i) * binom(n-m-1,i-1) ) * prod([
+            binom(m,n-vj) for vj in v
+        ])
+        for m in range(l, u+1)
+    ])
+
 def coincidencetest(incidence_statistic, frequencies, number_samples,
                     format_p_value: bool=True,
                     correction_feature_set_size: int=None,
@@ -211,7 +247,8 @@ def coincidencetest(incidence_statistic, frequencies, number_samples,
     strategy : {'closed-form', 'sum-distribution'}, optional
         Selects the method of computation.
         The following options are available (default is 'closed-form'):
-          * 'closed-form': The closed formula (single summation).
+          * 'closed-form': The direct closed formula (a single summation).
+          * 'closed-form-covers': The closed formula deduced using cover-counting.
           * 'sum-distribution': Sums values of the distribution (i.e. values of the
             function `calculate_probability_of_multicoincidence`), amounting to a
             double summation.
@@ -225,6 +262,7 @@ def coincidencetest(incidence_statistic, frequencies, number_samples,
     """
     if not isinstance(incidence_statistic, int):
         raise TypeError('incidence_statistic must be int.')
+
     if not isinstance(number_samples, int):
         raise TypeError('number_samples must be int.')
 
@@ -236,6 +274,18 @@ def coincidencetest(incidence_statistic, frequencies, number_samples,
         )
 
     if strategy == 'closed-form':
+        configurations = configurations_bounded_intersection(
+            ambient_size = ambient_size,
+            set_sizes = frequencies,
+            intersection_size = incidence_statistic,
+        )
+        all_configurations = count_all_configurations(
+            set_sizes = set_sizes,
+            ambient_size = ambient_size,
+        )
+        p_value = configurations / all_configurations
+
+    if strategy == 'closed-form-covers':
         complements = [ambient_size - s for s in set_sizes]
         configurations = union_bound_count(
             ambient_size = ambient_size,
