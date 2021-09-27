@@ -37,6 +37,7 @@ def do_tests(gathered):
             'Out of' : gathered['number of samples'],
             'p-value' : p_value,
         })
+        print('Tested signature %s' % ' '.join(sorted(item['signature'])))
 
     table = pd.DataFrame(rows)
     table.sort_values(by='p-value', inplace=True)
@@ -90,7 +91,7 @@ if __name__=='__main__':
     if delimiter == 'tab':
         delimiter = '\t'
     data = pd.read_csv(args.input_filename, delimiter=delimiter)
-    closed_sets, dual_sets = find_concepts(data)
+    closed_sets, dual_sets = find_concepts(data, level_limit=args.level_limit, max_recursion=args.max_recursion)
     gathered = gather_data(data, closed_sets, dual_sets)
     
     table = do_tests(gathered)

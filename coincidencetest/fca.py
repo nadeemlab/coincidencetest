@@ -25,6 +25,9 @@ class ConceptLattice:
         self.level_limit = level_limit
         self.max_recursion = max_recursion
 
+        if (not self.level_limit is None) or (not self.max_recursion is None):
+            logger.debug('Using level limit %s, maximum recursions %s', self.level_limit, self.max_recursion)
+
         self.closed_sets = []
         self.dual_sets = []
         for feature in self.data.columns:
@@ -44,7 +47,7 @@ class ConceptLattice:
             if self.level_limit:
                 logger.debug('Completed level %s. %s pairs tried, %s new sets.',
                     level,
-                    level_limit,
+                    self.level_limit,
                     new_number_sets - previous_number_sets,
                 )
             else:
