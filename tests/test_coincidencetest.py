@@ -351,7 +351,7 @@ class TestStirlingNumberCalc:
     def test_larger():
         cases = {
             (8, 4) : 1701,
-            # (10, 3) : 9330,
+            (10, 3) : 9330,
             (10, 7) : 5880,
         }
         for (ambient_size, number_parts), value in cases.items():
@@ -389,7 +389,7 @@ class TestExactProbabilityCalc:
         cdf = [
             total - sum([outputs[j] for j in range(0, i)]) for i in range(len(outputs))
         ]
-        return outputs, cdf # Needs assert
+        return outputs, cdf
 
     @staticmethod
     def test_exact_probability_of_intersection():
