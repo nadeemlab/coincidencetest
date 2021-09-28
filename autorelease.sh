@@ -13,12 +13,6 @@ source_note_color="\033[36;40m"
 
 script_file=$(echo "$0" | grep -oE "[a-zA-Z0-9_]+.sh$")
 start_time=$SECONDS
-if [[ "$1" == "skip-singularity" ]];
-then
-    skip_singularity=1
-else
-    skip_singularity=0
-fi
 
 function wrapup-previous-timed() {
     units="seconds "
