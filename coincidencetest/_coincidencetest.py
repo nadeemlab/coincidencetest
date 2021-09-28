@@ -272,8 +272,6 @@ def coincidencetest(incidence_statistic, frequencies, number_samples,
     ambient_size = number_samples
     if incidence_statistic > min(set_sizes):
         return 0
-    # if incidence_statistic < ambient_size - min([ambient_size - s for s in set_sizes]):
-    #     return 1
 
     if strategy == 'closed-form':
         configurations = configurations_bounded_intersection(
