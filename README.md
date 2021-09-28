@@ -1,7 +1,6 @@
-# coincidencetest
 This exact test assesses the statistical significance of finding a feature subset in binary feature data such that the number of simultaneously-positive samples is large.
 
-Everything needed to perform the test is located in the self-contained module [_coincidencetest.py](coincidencetest/_coincidencetest.py).
+Everything needed to perform the test is located in the self-contained module [_coincidencetest.py](https://github.com/nadeemlab/coincidencetest/blob/main/coincidencetest/_coincidencetest.py).
 
 ## Example
 Install as usual with `pip install .` from inside the cloned repository directory.
