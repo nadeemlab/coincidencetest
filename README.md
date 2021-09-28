@@ -3,8 +3,6 @@ This exact test assesses the statistical significance of finding a feature subse
 Everything needed to perform the test is located in the self-contained module [_coincidencetest.py](https://github.com/nadeemlab/coincidencetest/blob/main/coincidencetest/_coincidencetest.py).
 
 ## Example
-Install as usual with `pip install .` from inside the cloned repository directory.
-
 Install from [PyPI](https://pypi.org/project/coincidencetest/):
 ```bash
 pip install coincidencetest
