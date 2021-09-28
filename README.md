@@ -28,7 +28,7 @@ To make the test immediately useful, this package is distributed together with a
 
 The installed package exposes the command-line program `coincidence-clustering` incoporating this tool. Use it like so:
 ```bash
-coincidence-clustering --input-filename=example_data/bc_cell_data.tsv --output-tsv=signatures.tsv
+coincidence-clustering --input-filename=example_data/bc_cell_data.tsv --output-tsv=signatures.tsv --level-limit=100 --max-recursion=4
 ```
 
 ## Web application
