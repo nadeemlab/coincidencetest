@@ -39,8 +39,8 @@ setuptools.setup(
     python_requires='>=3.8',
     install_requires=requirements,
     project_urls = {
-        'Documentation': 'https://github.com/jimmymathews/coincidencetest',
-        'Source code': 'https://github.com/jimmymathews/coincidencetest',
+        'Documentation': 'https://github.com/nadeemlab/coincidencetest',
+        'Source code': 'https://github.com/nadeemlab/coincidencetest',
     },
-    url = 'https://github.com/jimmymathews/coincidencetest',
+    url = 'https://github.com/nadeemlab/coincidencetest',
 )
