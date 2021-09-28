@@ -35,6 +35,7 @@ setuptools.setup(
         'Topic :: Scientific/Engineering',
         'Intended Audience :: Science/Research',
     ],
+    package_data={'coincidencetest': ['version.txt']},
     python_requires='>=3.8',
     install_requires=requirements,
     project_urls = {
