@@ -18,10 +18,10 @@ loader = open('loader.svg', 'rb').read()
 loader = str(base64.b64encode(loader), 'utf-8')
 page = page.replace('{{loader-icon-base64}}', loader)
 
-example_tsv = open('multiplexed_1500.tsv', 'rb').read()
+example_tsv = open('../example_data/bc_cell_data.tsv', 'rb').read()
 example_tsv = str(base64.b64encode(example_tsv), 'utf-8')
 data_uri = 'data: text/tab-separated-values;base64,' + example_tsv
-page = page.replace('{{multiplexed_1500.tsv}}', data_uri)
+page = page.replace('{{bc_cell_data.tsv}}', data_uri)
 
 worker = open('_worker.js').read()
 coincidencetest_js = open('coincidencetest.js', 'rt').read()
