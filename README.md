@@ -51,4 +51,4 @@ The package is tested with
 pytest .
 ```
 
-The key step is a computation of the number of covers of a set of a given size by sets of prescribed sizes, so the most important tests check that several different algorithms for cover counting agree in small-number cases.
+The key step is a computation of the number of covers of a set of a given size by sets of prescribed sizes (equivalently, the number of subsets of prescribed sizes without common intersection), so the most important tests check that several different algorithms for cover counting agree in small-number cases.
