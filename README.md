@@ -49,3 +49,21 @@ pytest .
 ```
 
 The key step is a computation of the number of covers of a set of a given size by sets of prescribed sizes (equivalently, the number of subsets of prescribed sizes without common intersection), so the most important tests check that several different algorithms for cover counting agree in small-number cases.
+
+## Issues
+Please report all issues on the public forum.
+
+## License
+© [Nadeem Lab](https://nadeemlab.org/) - This code is distributed under **Apache 2.0 with Commons Clause** license, and is available for non-commercial academic purposes. 
+
+## Reference
+
+If you use this code or parts of it, please cite our paper:
+```
+@article{mathews2021coincidencetest,
+  title={An exact test for significance of clusters in binary data},
+  author={Mathews, James C, and Crowe, Camerone and Vanguri, Rami and Callahan, Margaret and Hollmann, Travis J and and Nadeem, Saad},
+  journal={arXiv},
+  year={2021}
+}
+```
