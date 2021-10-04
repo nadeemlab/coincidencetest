@@ -61,8 +61,7 @@ Please report all issues as [GitHub issues](https://github.com/nadeemlab/coincid
 © [Nadeem Lab](https://nadeemlab.org/) - The [core module](https://github.com/nadeemlab/coincidencetest/blob/main/coincidencetest/_coincidencetest.py) is distributed under the [3-clause BSD license](https://opensource.org/licenses/BSD-3-Clause). All other modules are distributed under [Apache 2.0 with Commons Clause](https://commonsclause.com) license, and are available for non-commercial academic purposes.
 
 ## Reference
-
-If you use this code or parts of it, please cite our paper:
+If you use this code or parts of it, please cite [our paper](https://arxiv.org/abs/2109.13876):
 ```
 @article{mathews2021coincidencetest,
   title={An exact test for significance of clusters in binary data},
