@@ -25,7 +25,11 @@ To make the test immediately useful, this package is distributed together with a
 
 The installed package exposes the command-line program `coincidence-clustering` incoporating this tool. Use it like so:
 ```bash
-coincidence-clustering --input-filename=example_data/bc_cell_data.tsv --output-tsv=signatures.tsv --level-limit=100 --max-recursion=4
+coincidence-clustering \
+  --input-filename=example_data/bc_cell_data.tsv \
+  --output-tsv=signatures.tsv \
+  --level-limit=50 \
+  --max-recursion=3
 ```
 
 ## Web application
@@ -51,7 +55,7 @@ pytest .
 The key step is a computation of the number of covers of a set of a given size by sets of prescribed sizes (equivalently, the number of subsets of prescribed sizes without common intersection), so the most important tests check that several different algorithms for cover counting agree in small-number cases.
 
 ## Issues
-Please report all issues on the public forum.
+Please report all issues as [GitHub issues](https://github.com/nadeemlab/coincidencetest/issues).
 
 ## License
 © [Nadeem Lab](https://nadeemlab.org/) - The [core module](https://github.com/nadeemlab/coincidencetest/blob/main/coincidencetest/_coincidencetest.py) is distributed under the [3-clause BSD license](https://opensource.org/licenses/BSD-3-Clause). All other modules are distributed under [Apache 2.0 with Commons Clause](https://commonsclause.com) license, and are available for non-commercial academic purposes.

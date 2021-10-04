@@ -63,14 +63,13 @@ def list_frequencies(gathered):
 def write_lattice(results_table, original_sets):
     node_attributes = {
         'Frequency' : list(results_table['Frequency']),
-        'log10 p' : [math.log10(p) for p in results_table['p-value']],
+        'log10 p' : [math.log10(p) if p>0 else None for p in results_table['p-value']],
         'Signature' : list(results_table['Signature']),
     }
     g = Graph(directed=True)
     g.add_vertices(len(node_attributes['Frequency']), attributes=node_attributes)
 
     all_signatures = list(results_table['Signature'])
-    print(all_signatures)
     for i, row1 in results_table.iterrows():
         for j, row2 in results_table.iterrows():
             if i == j:
@@ -79,7 +78,6 @@ def write_lattice(results_table, original_sets):
             J = row2['Signature']
             if len(set(original_sets[I]).difference(original_sets[J])) == 0:
                 edge = (all_signatures.index(I), all_signatures.index(J))
-                print('Added %s' % str(edge))
                 g.add_edges([edge])
 
     g.save('coincidence_clustering_lattice.graphml', format='graphml')
