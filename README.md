@@ -66,7 +66,7 @@ If you use this code or parts of it, please cite our paper:
 ```
 @article{mathews2021coincidencetest,
   title={An exact test for significance of clusters in binary data},
-  author={Mathews, James C, and Crowe, Camerone and Vanguri, Rami and Callahan, Margaret and Hollmann, Travis J and and Nadeem, Saad},
+  author={Mathews, James C, and Crowe, Cameron and Vanguri, Rami and Callahan, Margaret and Hollmann, Travis J and and Nadeem, Saad},
   journal={arXiv},
   year={2021}
 }
