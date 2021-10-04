@@ -54,7 +54,7 @@ The key step is a computation of the number of covers of a set of a given size b
 Please report all issues on the public forum.
 
 ## License
-© [Nadeem Lab](https://nadeemlab.org/) - The [core module](coincidencetest/_coincidencetest.py) is distributed under the [3-clause BSD license](https://opensource.org/licenses/BSD-3-Clause). All other modules are distributed under [Apache 2.0 with Commons Clause](https://commonsclause.com) license, and is available for non-commercial academic purposes. 
+© [Nadeem Lab](https://nadeemlab.org/) - The [core module](https://github.com/nadeemlab/coincidencetest/blob/main/coincidencetest/_coincidencetest.py) is distributed under the [3-clause BSD license](https://opensource.org/licenses/BSD-3-Clause). All other modules are distributed under [Apache 2.0 with Commons Clause](https://commonsclause.com) license, and are available for non-commercial academic purposes.
 
 ## Reference
 
