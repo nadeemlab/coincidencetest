@@ -249,18 +249,35 @@ def coincidencetest(incidence_statistic, frequencies, number_samples,
     strategy : {'closed-form', 'sum-distribution'}, optional
         Selects the method of computation.
         The following options are available (default is 'closed-form'):
-          * 'closed-form': The direct closed formula (a single summation).
+          * 'closed-form': The direct closed formula (a single summation), as
+            described in [1]_ .
           * 'closed-form-covers': The closed formula deduced using cover-counting.
+            This amounts to the same as 'closed-form', under the "duality" of taking
+            complements of sets so that the intersection-empty criterion becomes the
+            covering criterion.
           * 'sum-distribution': Sums values of the distribution (i.e. values of the
             function `calculate_probability_of_multicoincidence`), amounting to a
-            double summation.
+            double summation. Much slower than 'closed-form'.
 
     Returns
     -------
     p_value : float
         The probability that the incidence statistic is greater than or equal to the
         given one, among all configurations with the given number of positive
-        samples for each feature.
+        samples for each respective feature.
+
+    References
+    ----------
+    .. [1] Mathews, J.C., Crowe, C., Vanguri, R., Callahan, M., Hollmann, T.J.,
+           and Nadeem, S. (2021). An exact test for significance of clusters in
+           binary data. https://arxiv.org/abs/2109.13876
+
+    Examples
+    --------
+    >>> import coincidencetest
+    >>> from coincidencetest import coincidencetest
+    >>> coincidencetest(2, [3, 3, 3, 3], 10)
+    0.0008877
     """
     if not isinstance(incidence_statistic, int):
         raise TypeError('incidence_statistic must be int.')
