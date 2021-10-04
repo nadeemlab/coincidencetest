@@ -33,7 +33,6 @@ def do_tests(gathered):
             item['number of samples'],
             [frequencies[feature] for feature in item['signature']],
             gathered['number of samples'],
-            format_p_value=False,
             correction_feature_set_size=gathered['number of features'],
         )
         s = ' '.join(sorted(item['signature']))

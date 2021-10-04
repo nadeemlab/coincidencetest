@@ -36,6 +36,17 @@ def binom(ambient_size: int=0, subset_size: int=0):
             factorial(ambient_size - subset_size)
 
 def sign(x):
+    """
+    Parameters
+    ----------
+    x : int
+        Any integer.
+
+    Returns
+    -------
+    s : int
+        1 if x is even and -1 if x is odd.
+    """
     return 1 if x % 2 == 0 else -1
 
 def compute_number_of_covers(set_sizes: tuple=(), ambient_size: int=0,
@@ -188,7 +199,7 @@ def union_bound_count(ambient_size: int=0,
     ])
 
 def configurations_bounded_intersection(ambient_size: int=0,
-                                        set_sizes: list=[],
+                                        set_sizes: list=None,
                                         intersection_size: int=0):
     """
     Computes the number of configurations of subsets of a set of a given size,
@@ -215,14 +226,16 @@ def configurations_bounded_intersection(ambient_size: int=0,
     l = n - min(v)
     u = n - i
     return sum([
-        sign(m) * binom(n,m) * ( sign(l) * binom(n-m-1,n-l) + sign(n-i) * binom(n-m-1,i-1) ) * prod([
+        sign(m)
+        * binom(n,m)
+        * (sign(l) * binom(n-m-1,n-l) + sign(n-i) * binom(n-m-1,i-1))
+        * prod([
             binom(m,n-vj) for vj in v
         ])
         for m in range(l, u+1)
     ])
 
 def coincidencetest(incidence_statistic, frequencies, number_samples,
-                    format_p_value: bool=True,
                     correction_feature_set_size: int=None,
                     strategy: str='closed-form'):
     """
@@ -239,9 +252,6 @@ def coincidencetest(incidence_statistic, frequencies, number_samples,
         The integer number of positive samples for each respective feature.
     number_samples : int
         The total number of samples.
-    format_p_value : bool
-        Default True. If True, reduces the number of significant figures of the
-        p-value to 4, for readability.
     correction_feature_set_size : int
         Default None. If provided, performs p-value correction for multiple testing
         by multiplying by the number of subsets of the full set of features
@@ -333,28 +343,7 @@ def coincidencetest(incidence_statistic, frequencies, number_samples,
         total = sum(probabilities.values())
         if correction_feature_set_size:
             total = total * binom(correction_feature_set_size, len(set_sizes))
-            if total > 1.0:
-                total = 1.0
+            total = min(total, 1.0)
         p_value = total
 
-    if format_p_value:
-        return reduce_digits_p_value(p_value)
     return p_value
-
-def reduce_digits_p_value(p_value):
-    """
-    Parameters
-    ----------
-    p_value : float
-        A p-value to format for easier reading.
-
-    Returns
-    -------
-    p_value : float
-        The same value, but with the number of significant figures reduced to 4.
-        The string formatting for floats takes care of shortening the string
-        representation using the exponent notation, when the number of digits would
-        be large due to the number being very small.
-    """
-    precision = 4
-    return round(p_value, precision-int(floor(log10(abs(p_value))))-1)
