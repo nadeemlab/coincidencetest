@@ -350,13 +350,13 @@ def coincidencetest(incidence_statistic, frequencies, number_samples,
             for i in range(incidence_statistic, min(set_sizes) + 1)
         ]
         probabilities = {
-            intersection_size:
+            i:
             calculate_probability_of_multicoincidence(
-                intersection_size=intersection_size,
+                intersection_size=i,
                 set_sizes=set_sizes,
                 ambient_size=ambient_size,
             )
-            for intersection_size, set_sizes, ambient_size in cases
+            for i, set_sizes, ambient_size in cases
         }
         total = sum(probabilities.values())
         if correction_feature_set_size:

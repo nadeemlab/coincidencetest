@@ -1,4 +1,3 @@
-import time
 from math import factorial
 from itertools import chain
 from itertools import combinations
@@ -177,7 +176,7 @@ def reduce_set_sizes(set_sizes: tuple=(), which: list=None):
     return tuple(s for s in new_sizes if s > 0)
 
 
-class TestCoverCounting:
+class TestCountingFormulas:
     sample_cases = [
         ((2, 2), 3),
         ((3, 1), 4),
@@ -225,7 +224,7 @@ class TestCoverCounting:
 
     @staticmethod
     def test_binomial_formula_matches_brute_force():
-        for set_sizes, ambient_size in TestCoverCounting.sample_cases:
+        for set_sizes, ambient_size in TestCountingFormulas.sample_cases:
             covers1 = _compute_number_of_covers(
                 set_sizes = set_sizes,
                 ambient_size = ambient_size,
@@ -240,7 +239,7 @@ class TestCoverCounting:
 
     @staticmethod
     def test_binomial_formula_matches_recursion():
-        for set_sizes, ambient_size in TestCoverCounting.sample_cases:
+        for set_sizes, ambient_size in TestCountingFormulas.sample_cases:
             covers1 = _compute_number_of_covers(
                 set_sizes = set_sizes,
                 ambient_size = ambient_size,
@@ -256,7 +255,7 @@ class TestCoverCounting:
     @staticmethod
     def test_closed_formula_for_cdf():
         p_values = []
-        for set_sizes, ambient_size in TestCoverCounting.sample_cases:
+        for set_sizes, ambient_size in TestCountingFormulas.sample_cases:
             for I in range(1, min(set_sizes)+1):
                 p1 = coincidencetest(
                     incidence_statistic = I,
@@ -277,7 +276,7 @@ class TestCoverCounting:
     @staticmethod
     def test_direct_closed_formula_for_cdf():
         p_values = []
-        for set_sizes, ambient_size in TestCoverCounting.sample_cases:
+        for set_sizes, ambient_size in TestCountingFormulas.sample_cases:
             for I in range(1, min(set_sizes)+1):
                 p1 = coincidencetest(
                     incidence_statistic = I,
@@ -294,35 +293,6 @@ class TestCoverCounting:
                 assert(p1 == p2)
                 p_values.append((p1,p2))
         return p_values
-
-    @staticmethod
-    def gauge_performance_closed_formula_for_cdf():
-        times = []
-        p_values = []
-        for incidence_statistic, set_sizes, ambient_size in TestCoverCounting.extreme_sample_cases:
-            tic = time.perf_counter()
-            p1 = coincidencetest(
-                incidence_statistic = incidence_statistic,
-                frequencies = set_sizes,
-                number_samples = ambient_size,
-                strategy = 'closed-form',
-            )
-            toc = time.perf_counter()
-            time1 = toc - tic
-
-            tic = time.perf_counter()
-            p2 = coincidencetest(
-                incidence_statistic = incidence_statistic,
-                frequencies = set_sizes,
-                number_samples = ambient_size,
-                strategy = 'sum-distribution',
-            )
-            toc = time.perf_counter()
-            time2 = toc - tic
-
-            times.append({'closed-form' : time1, 'sum-distribution' : time2, 'ratio' : time2 / time1})
-            p_values.append({'closed-form' : p1,'sum-distribution' : p2})
-        return [times, p_values]
 
 
 class TestStirlingNumberCalc:
