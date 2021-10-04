@@ -304,6 +304,9 @@ def coincidencetest(incidence_statistic, frequencies, number_samples,
     >>> from coincidencetest import coincidencetest
     >>> coincidencetest(2, [3, 3, 3, 3], 10)
     0.0008877
+
+    This example shows that the probability is about 0.09% that four features, each
+    occurring with frequency 3/10, will simultaneously occur in 2 or more samples.
     """
     if not isinstance(incidence_statistic, int):
         raise TypeError('incidence_statistic must be int.')
