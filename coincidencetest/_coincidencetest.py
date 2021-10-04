@@ -1,9 +1,5 @@
 """
-The `coincidencetest` is an exact test for the probability of "coincidence" of
-several binary features along a subsample of a given size, given the positivity
-rates for each feature.
-
-It can be used to assess biclusters found in a feature matrix.
+Implementation of `coincidencetest`.
 """
 
 import math
@@ -229,6 +225,10 @@ def coincidencetest(incidence_statistic, frequencies, number_samples,
                     correction_feature_set_size: int=None,
                     strategy: str='closed-form'):
     """
+    The `coincidencetest` is an exact test for the probability of "coincidence" of
+    several binary features along a subsample of a given size, given the positivity
+    rates for each feature.
+
     Parameters
     ----------
     incidence_statistic : int
