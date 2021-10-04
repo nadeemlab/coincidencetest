@@ -263,14 +263,12 @@ class TestCoverCounting:
                     frequencies = set_sizes,
                     number_samples = ambient_size,
                     strategy = 'closed-form',
-                    format_p_value = False,
                 )
                 p2 = coincidencetest(
                     incidence_statistic = I,
                     frequencies = set_sizes,
                     number_samples = ambient_size,
                     strategy = 'sum-distribution',
-                    format_p_value = False,
                 )
                 assert(p1 == p2)
                 p_values.append((p1,p2))
@@ -286,14 +284,12 @@ class TestCoverCounting:
                     frequencies = set_sizes,
                     number_samples = ambient_size,
                     strategy = 'closed-form-covers',
-                    format_p_value = False,
                 )
                 p2 = coincidencetest(
                     incidence_statistic = I,
                     frequencies = set_sizes,
                     number_samples = ambient_size,
                     strategy = 'sum-distribution',
-                    format_p_value = False,
                 )
                 assert(p1 == p2)
                 p_values.append((p1,p2))
@@ -310,7 +306,6 @@ class TestCoverCounting:
                 frequencies = set_sizes,
                 number_samples = ambient_size,
                 strategy = 'closed-form',
-                format_p_value = False,
             )
             toc = time.perf_counter()
             time1 = toc - tic
@@ -321,7 +316,6 @@ class TestCoverCounting:
                 frequencies = set_sizes,
                 number_samples = ambient_size,
                 strategy = 'sum-distribution',
-                format_p_value = False,
             )
             toc = time.perf_counter()
             time2 = toc - tic
@@ -399,7 +393,7 @@ class TestExactProbabilityCalc:
 
 class TestStatisticalSignificanceTest:
     sample_cases = {
-        ((1, (2, 2, 2), 10)) : 0.07951,
+        ((1, (2, 2, 2), 10)) : 0.07950617283950617,
     }
 
     @staticmethod

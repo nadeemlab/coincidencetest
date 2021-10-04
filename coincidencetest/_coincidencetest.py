@@ -10,7 +10,8 @@ from math import prod
 from itertools import combinations
 from itertools import product
 
-def binom(ambient_size: int=0, subset_size: int=0):
+
+def binom(ambient_size: int = 0, subset_size: int = 0):
     """
     Computes a binomial coefficient. This implementation is exact, not using
     floating point arithmetic.
@@ -31,9 +32,10 @@ def binom(ambient_size: int=0, subset_size: int=0):
         return 0
     if subset_size < 0:
         return 0
-    return factorial(ambient_size) //   \
-            factorial(subset_size) //   \
-            factorial(ambient_size - subset_size)
+    return factorial(ambient_size) // \
+        factorial(subset_size) // \
+        factorial(ambient_size - subset_size)
+
 
 def sign(x):
     """
@@ -49,8 +51,9 @@ def sign(x):
     """
     return 1 if x % 2 == 0 else -1
 
-def compute_number_of_covers(set_sizes: tuple=(), ambient_size: int=0,
-                             strategy: str='binomial-formula'):
+
+def compute_number_of_covers(set_sizes: tuple = (), ambient_size: int = 0,
+                             strategy: str = 'binomial-formula'):
     """
     Computes the number of coverings of a given set by sets with prescribed sizes.
 
@@ -79,19 +82,21 @@ def compute_number_of_covers(set_sizes: tuple=(), ambient_size: int=0,
     --------
     Consider a set of size 3, to be covered by two sets, of sizes (2, 2). Each of
     the two sets is determined by which of the 3 elements to omit, and the pair of
-    sets is a covering if and only if the omitted elements are not equal. Thus there
-    are 3 * 3 - 3 = 6 coverings.
+    sets is a covering if and only if the omitted elements are not equal. Thus
+    there are 3 * 3 - 3 = 6 coverings.
 
     >>> import coincidencetest
     >>> from coincidencetest._coincidencetest import compute_number_of_covers
-    >>> compute_number_of_covers(set_sizes=(2,2), ambient_size=3)
+    >>> compute_number_of_covers(set_sizes = (2,2), ambient_size = 3)
     6
     """
     if strategy == 'binomial-formula':
         N = ambient_size
         n = set_sizes
         terms = [
-            sign(N+m)*binom(N,m)*prod([binom(m,n[i]) for i in range(len(n))])
+            sign(N + m)
+            * binom(N, m)
+            * prod([binom(m, n[i]) for i in range(len(n))])
             for m in range(max(n), N + 1)
         ]
         return sum(terms)
@@ -103,13 +108,15 @@ def compute_number_of_covers(set_sizes: tuple=(), ambient_size: int=0,
         ]
         subset_families = product(*all_subsets_fixed_size)
         covers = [
-            family for family in subset_families if set().union(*family) == whole_set
+            family for family in subset_families
+            if set().union(*family) == whole_set
         ]
         return len(covers)
 
     return None
 
-def count_all_configurations(set_sizes: tuple=(), ambient_size: int=0):
+
+def count_all_configurations(set_sizes: tuple = (), ambient_size: int = 0):
     """
     Computes the number of all configurations of subsets of a set of a given size,
     the subsets being of prescribed sizes.
@@ -128,9 +135,10 @@ def count_all_configurations(set_sizes: tuple=(), ambient_size: int=0):
     """
     return prod([binom(ambient_size, size) for size in set_sizes])
 
-def calculate_probability_of_multicoincidence(ambient_size: int=0,
-                                              set_sizes: tuple=(),
-                                              intersection_size: int=0):
+
+def calculate_probability_of_multicoincidence(ambient_size: int = 0,
+                                              set_sizes: tuple = (),
+                                              intersection_size: int = 0):
     """
     Calculates the probability that subsets of a set of a given size, themselves of
     prescribed sizes, have mutual intersection of a given cardinality.
@@ -157,18 +165,19 @@ def calculate_probability_of_multicoincidence(ambient_size: int=0,
     initial_choices = binom(ambient_size=ambient_size, subset_size=intersection_size)
     reduced_ambient_size = ambient_size - intersection_size
     covers_of_remaining = compute_number_of_covers(
-        set_sizes = tuple(reduced_ambient_size - size for size in reduced_sizes),
-        ambient_size = reduced_ambient_size,
+        set_sizes=tuple(reduced_ambient_size - size for size in reduced_sizes),
+        ambient_size=reduced_ambient_size,
     )
     all_configurations = count_all_configurations(
-        set_sizes = set_sizes,
-        ambient_size = ambient_size,
+        set_sizes=set_sizes,
+        ambient_size=ambient_size,
     )
     return initial_choices * covers_of_remaining / all_configurations
 
-def union_bound_count(ambient_size: int=0,
-                      set_sizes: tuple=(),
-                      union_size: int=0):
+
+def union_bound_count(ambient_size: int = 0,
+                      set_sizes: tuple = (),
+                      union_size: int = 0):
     """
     Computes the number of all configurations of subsets of a set of a given size,
     the subsets being of prescribed sizes, such that the union has given size
@@ -198,9 +207,10 @@ def union_bound_count(ambient_size: int=0,
         for m in range(max(v), n+1)
     ])
 
-def configurations_bounded_intersection(ambient_size: int=0,
-                                        set_sizes: list=None,
-                                        intersection_size: int=0):
+
+def configurations_bounded_intersection(ambient_size: int = 0,
+                                        set_sizes: list = None,
+                                        intersection_size: int = 0):
     """
     Computes the number of configurations of subsets of a set of a given size,
     the subsets being of prescribed sizes, such that the intersection has given
@@ -235,9 +245,10 @@ def configurations_bounded_intersection(ambient_size: int=0,
         for m in range(l, u+1)
     ])
 
+
 def coincidencetest(incidence_statistic, frequencies, number_samples,
-                    correction_feature_set_size: int=None,
-                    strategy: str='closed-form'):
+                    correction_feature_set_size: int = None,
+                    strategy: str = 'closed-form'):
     """
     The `coincidencetest` is an exact test for the probability of "coincidence" of
     several binary features along a subsample of a given size, given the positivity
@@ -303,26 +314,26 @@ def coincidencetest(incidence_statistic, frequencies, number_samples,
 
     if strategy == 'closed-form':
         configurations = configurations_bounded_intersection(
-            ambient_size = ambient_size,
-            set_sizes = frequencies,
-            intersection_size = incidence_statistic,
+            ambient_size=ambient_size,
+            set_sizes=frequencies,
+            intersection_size=incidence_statistic,
         )
         all_configurations = count_all_configurations(
-            set_sizes = set_sizes,
-            ambient_size = ambient_size,
+            set_sizes=set_sizes,
+            ambient_size=ambient_size,
         )
         p_value = configurations / all_configurations
 
     if strategy == 'closed-form-covers':
         complements = [ambient_size - s for s in set_sizes]
         configurations = union_bound_count(
-            ambient_size = ambient_size,
-            set_sizes = complements,
-            union_size = ambient_size - incidence_statistic,
+            ambient_size=ambient_size,
+            set_sizes=complements,
+            union_size=ambient_size - incidence_statistic,
         )
         all_configurations = count_all_configurations(
-            set_sizes = set_sizes,
-            ambient_size = ambient_size,
+            set_sizes=set_sizes,
+            ambient_size=ambient_size,
         )
         p_value = configurations / all_configurations
 
@@ -334,9 +345,9 @@ def coincidencetest(incidence_statistic, frequencies, number_samples,
         probabilities = {
             intersection_size :
             calculate_probability_of_multicoincidence(
-                intersection_size = intersection_size,
-                set_sizes = set_sizes,
-                ambient_size = ambient_size,
+                intersection_size=intersection_size,
+                set_sizes=set_sizes,
+                ambient_size=ambient_size,
             )
             for intersection_size, set_sizes, ambient_size in intersection_cases
         }
