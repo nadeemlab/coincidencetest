@@ -6,7 +6,7 @@ import re
 import pandas as pd
 
 import coincidencetest
-from coincidencetest import find_concepts
+from coincidencetest.fca import find_concepts
 from coincidencetest import coincidencetest
 
 def listify(table):
