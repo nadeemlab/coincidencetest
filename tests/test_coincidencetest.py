@@ -2,11 +2,14 @@ from math import factorial
 from itertools import chain
 from itertools import combinations
 
+import numpy as np
+
 import coincidencetest
 from coincidencetest._coincidencetest import compute_number_of_covers
 from coincidencetest._coincidencetest import binom
 from coincidencetest._coincidencetest import calculate_probability_of_multicoincidence
 from coincidencetest import coincidencetest
+from coincidencetest import coincidencetest_matrix
 
 
 def _compute_number_of_covers(set_sizes: tuple=(), ambient_size: int=0,
@@ -294,6 +297,43 @@ class TestCountingFormulas:
                 p_values.append((p1,p2))
         return p_values
 
+    @staticmethod
+    def test_matrix_wrapper():
+        A = np.array([
+            [0, 0, 0],
+            [1, 1, 1],
+            [0, 0, 0],
+            [0, 1, 0],
+            [0, 0, 0],
+            [1, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 1],
+            [0, 0, 0],
+        ])
+        p1 = coincidencetest_matrix(A)
+
+        B = np.array([
+            [0, 0, 0],
+            [1, 1, 1],
+            [0, 0, 0],
+            [0, 1, 0],
+            [0, 0, 0],
+            [1, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 1],
+            [1, 0, 0],
+        ])
+        p2 = coincidencetest_matrix(B)
+
+        case = (1, (2, 2, 2), 10)
+        incidence_statistic, frequencies, number_samples = case
+        p3 = coincidencetest(incidence_statistic, frequencies, number_samples)
+
+        assert(p1 == p3)
+        assert(p1 != p2)
+
 
 class TestStirlingNumberCalc:
     @staticmethod
@@ -367,7 +407,7 @@ class TestStatisticalSignificanceTest:
     }
 
     @staticmethod
-    def test_p_values():
+    def test_p_values_prior_calculation():
         cases = TestStatisticalSignificanceTest.sample_cases
         for (incidence_statistic, frequencies, number_samples), p_expected in cases.items():
             p = coincidencetest(incidence_statistic, frequencies, number_samples)

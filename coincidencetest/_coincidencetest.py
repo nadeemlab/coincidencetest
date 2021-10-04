@@ -272,7 +272,7 @@ def coincidencetest(incidence_statistic, frequencies, number_samples,
         by multiplying by the number of subsets of the full set of features (which
         are `correction_feature_set_size` in number) which are the size of the
         length of `frequencies`.
-    strategy : {'closed-form', 'sum-distribution'}, optional
+    strategy : {'closed-form', 'closed-form-covers', 'sum-distribution'}, optional
         Selects the method of computation.
         The following options are available (default is 'closed-form'):
           * 'closed-form': The direct closed formula (a single summation), as
@@ -365,3 +365,35 @@ def coincidencetest(incidence_statistic, frequencies, number_samples,
         p_value = total
 
     return p_value
+
+
+def coincidencetest_matrix(A, correction_feature_set_size: int = None,
+                           strategy: str = 'closed-form'):
+    """
+    Convenience wrapper for `coincidencetest` in case the input parameters are to
+    be extracted from a feature matrix.
+
+    Parameters
+    ----------
+    A : numpy.ndarray
+        A binary feature matrix (columns as features, rows as samples).
+    correction_feature_set_size : int
+        See `coincidencetest`.
+    strategy : {'closed-form', 'closed-form-covers', 'sum-distribution'}, optional
+        See `coincidencetest`.
+
+    See also
+    --------
+    `coincidencetest`
+    """
+    number_features = A.shape[1]
+    incidence_statistic = len([row for row in A if sum(row) == number_features])
+    frequencies = [sum(column) for column in A.transpose()]
+    number_samples = A.shape[0]
+    return coincidencetest(
+        incidence_statistic = incidence_statistic,
+        frequencies = frequencies,
+        number_samples = number_samples,
+        correction_feature_set_size = correction_feature_set_size,
+        strategy = strategy,
+    )
