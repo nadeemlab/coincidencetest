@@ -162,7 +162,10 @@ def calculate_probability_of_multicoincidence(ambient_size: int = 0,
     if any(size < 0 for size in reduced_sizes):
         return 0
 
-    initial_choices = binom(ambient_size=ambient_size, subset_size=intersection_size)
+    initial_choices = binom(
+        ambient_size=ambient_size,
+        subset_size=intersection_size,
+    )
     reduced_ambient_size = ambient_size - intersection_size
     covers_of_remaining = compute_number_of_covers(
         set_sizes=tuple(reduced_ambient_size - size for size in reduced_sizes),
@@ -201,8 +204,8 @@ def union_bound_count(ambient_size: int = 0,
     v = set_sizes
     n = union_size
     return sign(n) * sum([
-        sign(m) * binom(N,m) * binom(N-m-1,N-n-1) * prod([
-            binom(m,vj) for vj in v
+        sign(m) * binom(N, m) * binom(N-m-1, N-n-1) * prod([
+            binom(m, vj) for vj in v
         ])
         for m in range(max(v), n+1)
     ])
@@ -233,16 +236,16 @@ def configurations_bounded_intersection(ambient_size: int = 0,
     n = ambient_size
     v = set_sizes
     i = intersection_size
-    l = n - min(v)
+    L = n - min(v)
     u = n - i
     return sum([
         sign(m)
-        * binom(n,m)
-        * (sign(l) * binom(n-m-1,n-l) + sign(n-i) * binom(n-m-1,i-1))
+        * binom(n, m)
+        * (sign(L) * binom(n-m-1, n-L) + sign(n-i) * binom(n-m-1, i-1))
         * prod([
-            binom(m,n-vj) for vj in v
+            binom(m, n-vj) for vj in v
         ])
-        for m in range(l, u+1)
+        for m in range(L, u+1)
     ])
 
 
@@ -265,18 +268,18 @@ def coincidencetest(incidence_statistic, frequencies, number_samples,
         The total number of samples.
     correction_feature_set_size : int
         Default None. If provided, performs p-value correction for multiple testing
-        by multiplying by the number of subsets of the full set of features
-        (which are `correction_feature_set_size` in number) which are the size of
-        the length of `frequencies`.
+        by multiplying by the number of subsets of the full set of features (which
+        are `correction_feature_set_size` in number) which are the size of the
+        length of `frequencies`.
     strategy : {'closed-form', 'sum-distribution'}, optional
         Selects the method of computation.
         The following options are available (default is 'closed-form'):
           * 'closed-form': The direct closed formula (a single summation), as
             described in [1]_ .
           * 'closed-form-covers': The closed formula deduced using cover-counting.
-            This amounts to the same as 'closed-form', under the "duality" of taking
-            complements of sets so that the intersection-empty criterion becomes the
-            covering criterion.
+            This amounts to the same as 'closed-form', under the "duality" of
+            taking complements of sets so that the intersection-empty criterion
+            becomes the covering criterion.
           * 'sum-distribution': Sums values of the distribution (i.e. values of the
             function `calculate_probability_of_multicoincidence`), amounting to a
             double summation. Much slower than 'closed-form'.
@@ -284,8 +287,8 @@ def coincidencetest(incidence_statistic, frequencies, number_samples,
     Returns
     -------
     p_value : float
-        The probability that the incidence statistic is greater than or equal to the
-        given one, among all configurations with the given number of positive
+        The probability that the incidence statistic is greater than or equal to
+        the given one, among all configurations with the given number of positive
         samples for each respective feature.
 
     References
@@ -338,18 +341,18 @@ def coincidencetest(incidence_statistic, frequencies, number_samples,
         p_value = configurations / all_configurations
 
     if strategy == 'sum-distribution':
-        intersection_cases = [
+        cases = [
             (i, set_sizes, ambient_size)
             for i in range(incidence_statistic, min(set_sizes) + 1)
         ]
         probabilities = {
-            intersection_size :
+            intersection_size:
             calculate_probability_of_multicoincidence(
                 intersection_size=intersection_size,
                 set_sizes=set_sizes,
                 ambient_size=ambient_size,
             )
-            for intersection_size, set_sizes, ambient_size in intersection_cases
+            for intersection_size, set_sizes, ambient_size in cases
         }
         total = sum(probabilities.values())
         if correction_feature_set_size:
