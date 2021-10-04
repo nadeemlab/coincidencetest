@@ -71,7 +71,8 @@ def compute_number_of_covers(set_sizes: tuple=(), ambient_size: int=0,
     sets is a covering if and only if the omitted elements are not equal. Thus there
     are 3 * 3 - 3 = 6 coverings.
 
-    >>> from coincidencetest import compute_number_of_covers
+    >>> import coincidencetest
+    >>> from coincidencetest._coincidencetest import compute_number_of_covers
     >>> compute_number_of_covers(set_sizes=(2,2), ambient_size=3)
     6
     """
