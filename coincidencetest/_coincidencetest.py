@@ -3,8 +3,6 @@ Implementation of `coincidencetest`.
 """
 
 import math
-from math import log10
-from math import floor
 from math import factorial
 from math import prod
 from itertools import combinations
@@ -236,16 +234,19 @@ def configurations_bounded_intersection(ambient_size: int = 0,
     n = ambient_size
     v = set_sizes
     i = intersection_size
-    L = n - min(v)
-    u = n - i
+    lower = n - min(v)
+    upper = n - i
     return sum([
         sign(m)
         * binom(n, m)
-        * (sign(L) * binom(n-m-1, n-L) + sign(n-i) * binom(n-m-1, i-1))
+        * (
+            sign(lower) * binom(n - m - 1, n - lower)
+            + sign(n - i) * binom(n - m - 1, i - 1)
+        )
         * prod([
-            binom(m, n-vj) for vj in v
+            binom(m, n - vj) for vj in v
         ])
-        for m in range(L, u+1)
+        for m in range(lower, upper + 1)
     ])
 
 
