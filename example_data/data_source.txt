@@ -1,0 +1,5 @@
+The file bc_cell_data.tsv is derived from the breast cancer cell profiling data published here:
+
+https://doi.org/10.5281/zenodo.4607374
+
+"The Single-Cell Pathology Landscape of Breast Cancer". Jackson et al. 2019.
