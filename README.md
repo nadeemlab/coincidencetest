@@ -44,10 +44,7 @@ def do_fisher(i, frequencies, n):
     a = i
     b = frequencies[0] - a
     c = frequencies[1] - a
-    d1 = (n - frequencies[1]) - b
-    d0 = (n - frequencies[0]) - c
-    assert d0 == d1
-    d = d0
+    d = n - a - b - c
     assert a + b + c + d == n
     return fisher_exact( [[a, b], [c, d]], alternative='greater')[1]
 
