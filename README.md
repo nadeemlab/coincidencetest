@@ -45,7 +45,6 @@ def do_fisher(i, frequencies, n):
     b = frequencies[0] - a
     c = frequencies[1] - a
     d = n - a - b - c
-    assert a + b + c + d == n
     return fisher_exact( [[a, b], [c, d]], alternative='greater')[1]
 
 coincidencetest(2, [5, 6], 100)
