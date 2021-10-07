@@ -27,7 +27,7 @@ coincidencetest(20, [1200, 1000, 400], 10000)
 
 1.153232141364226e-07
 ```
-This example shows that the probability is about 10^-7 that 3 features, occurring with frequencies 1200, 1000, and 400 out of 10000, will simultaneously occur in 20 or more samples.
+This example shows that the probability is about 10^-7 that 3 features, occurring with frequencies 1200, 1000, and 400 out of 10000, will simultaneously occur in 20 or more samples. This is exactly the same answer you would get if you were somehow able to do a brute-force permutation test, relabeling all feature assignments in *all possible (10000! * 10000! * 10000!) ways*, and counting the number of times simultaneous co-occurence took place in 20 or more samples.
 
 The example `coincidencetest(1, [5, 3, 7], 100)` yields p=0.01047, showing that the probability of *even just one* sample having all features can be very low, provided that enough of the features are individually relatively rare.
 
