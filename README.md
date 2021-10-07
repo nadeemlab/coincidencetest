@@ -3,7 +3,7 @@ This exact test assesses the statistical significance of finding a feature subse
 Everything needed to perform the test is located in the standalone module [_coincidencetest.py](https://github.com/nadeemlab/coincidencetest/blob/main/coincidencetest/_coincidencetest.py).
 
 ## Background
-Let's say you're left-handed, blue eyed, and you follow Neil deGrasse Tyson on Twitter. You go to a big concert with 10000 people, and you know your statistics so you expect about 1200 other left-handers, 1000 other people with blue eyes, and 400 other people who follow Neil deGrasse Tyson. And you were right! For some reason there was an entrance poll and there were 1200, 1000, and 400 people with these respective traits. And ... 20 people had *all 3 traits*. What are the chances!
+Let's say you're left-handed, blue-eyed, and you follow Neil deGrasse Tyson on Twitter. You go to a big concert with 10000 people, and you know your statistics so you expect about 1200 other left-handers, 1000 other people with blue eyes, and 400 other people who follow Neil deGrasse Tyson. And you were right! For some reason there was an entrance poll and there were 1200, 1000, and 400 people with these respective traits. And ... 20 people had *all 3 traits*. What are the chances!
 
 But 20 doesn't seem like that much in this context. Maybe the chances are pretty good?
 
