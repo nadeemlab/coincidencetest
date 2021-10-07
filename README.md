@@ -75,7 +75,6 @@ coincidence-clustering \
 
 ## Web application
 A Javascript port of the signature discovery and testing program is located in `webapp/`. To run it locally, use:
-
 ```bash
 cd webapp/
 chmod +x build.py
