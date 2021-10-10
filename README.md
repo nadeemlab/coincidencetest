@@ -13,6 +13,10 @@ But this still doesn't tell us the chances of what you actually observed. All th
 
 The technique introduced in [our paper](https://arxiv.org/abs/2109.13876) and implemented in the Python package `coincidencetest` gives an exact answer to questions like this.
 
+![pmf_example.png](pmf_example.png)
+
+*The probability mass function (PMF) and cumulative distribution function (CDF) of the number of "coincidences" in the example described above.*
+
 ## Examples
 Install from [PyPI](https://pypi.org/project/coincidencetest/):
 ```bash
