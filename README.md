@@ -1,3 +1,7 @@
+
+[![DOI](https://zenodo.org/badge/403796363.svg)](https://zenodo.org/badge/latestdoi/403796363)
+
+
 This exact test assesses the statistical significance of finding a feature subset in binary feature data such that the number of simultaneously-positive samples is large, i.e. a "coincidence" of many features.
 
 Everything needed to perform the test is located in the standalone module [_coincidencetest.py](https://github.com/nadeemlab/coincidencetest/blob/main/coincidencetest/_coincidencetest.py).
