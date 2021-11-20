@@ -272,7 +272,11 @@ class TestCountingFormulas:
                     number_samples = ambient_size,
                     strategy = 'sum-distribution',
                 )
-                assert(p1 == p2)
+                if p1 != 0:
+                    denominator = p1
+                else:
+                    denominator = 1
+                assert(abs(p1 - p2) / denominator < 0.00000000001)
                 p_values.append((p1,p2))
         return p_values
 
@@ -293,9 +297,40 @@ class TestCountingFormulas:
                     number_samples = ambient_size,
                     strategy = 'sum-distribution',
                 )
-                assert(p1 == p2)
+                if p1 != 0:
+                    denominator = p1
+                else:
+                    denominator = 1
+                assert(abs(p1 - p2) / denominator < 0.00000000001)
                 p_values.append((p1,p2))
         return p_values
+
+    @staticmethod
+    def test_complementarity_optimization():
+        p_values = []
+        for set_sizes, ambient_size in TestCountingFormulas.sample_cases:
+            for I in range(1, min(set_sizes)+1):
+                p1 = coincidencetest(
+                    incidence_statistic = I,
+                    frequencies = set_sizes,
+                    number_samples = ambient_size,
+                    strategy = 'sum-distribution',
+                )
+                p2 = coincidencetest(
+                    incidence_statistic = I,
+                    frequencies = set_sizes,
+                    number_samples = ambient_size,
+                    strategy = 'sum-distribution',
+                    use_complementary_values = True
+                )
+                if p1 != 0:
+                    denominator = p1
+                else:
+                    denominator = 1
+                assert(abs(p1 - p2) / denominator < 0.00000000001)
+                p_values.append((p1,p2))
+        return p_values
+
 
     @staticmethod
     def test_matrix_wrapper():

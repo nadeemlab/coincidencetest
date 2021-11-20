@@ -7,6 +7,27 @@ from math import factorial
 from math import prod
 from itertools import combinations
 from itertools import product
+from multiprocessing import Pool
+
+
+def falling_factorial(a, b):
+    """
+    Computes the so-called falling factorial in the obvious, more efficient way
+    than the ratio of 2 separate factorials.
+
+    Parameters
+    ----------
+    a : int
+        The potentially larger non-negative integer.
+    b: int
+        The portentially smaller non-negative integer.
+
+    Returns
+    -------
+    c : int
+        The value of a! / b!.
+    """
+    return prod([a - i for i in range(a-b)])
 
 
 def binom(ambient_size: int = 0, subset_size: int = 0):
@@ -30,9 +51,11 @@ def binom(ambient_size: int = 0, subset_size: int = 0):
         return 0
     if subset_size < 0:
         return 0
-    return factorial(ambient_size) // \
-        factorial(subset_size) // \
-        factorial(ambient_size - subset_size)
+    if subset_size < 0.5 * ambient_size:
+        return binom(ambient_size=ambient_size, subset_size=ambient_size - subset_size)
+    else:
+        return falling_factorial(ambient_size, subset_size) // \
+               factorial(ambient_size - subset_size)
 
 
 def sign(x):
@@ -48,6 +71,21 @@ def sign(x):
         1 if x is even and -1 if x is odd.
     """
     return 1 if x % 2 == 0 else -1
+
+
+def single_term_cover_counting(a):
+    """
+    Parameters
+    ----------
+    a : tuple
+        3-tuple consisting of the ambient set size N, the term-index parameter m,
+        and the set sizes n (itself a tuple or list).
+
+    Returns
+    -------
+        The m-th term of the summation formula.
+    """
+    return sign(a[0] + a[1]) * binom(a[0], a[1]) * prod([binom(a[1], a[2][i]) for i in range(len(a[2]))])
 
 
 def compute_number_of_covers(set_sizes: tuple = (), ambient_size: int = 0,
@@ -91,12 +129,9 @@ def compute_number_of_covers(set_sizes: tuple = (), ambient_size: int = 0,
     if strategy == 'binomial-formula':
         N = ambient_size
         n = set_sizes
-        terms = [
-            sign(N + m)
-            * binom(N, m)
-            * prod([binom(m, n[i]) for i in range(len(n))])
-            for m in range(max(n), N + 1)
-        ]
+        arguments = [(N, m, n) for m in range(max(n), N + 1)]
+        with Pool(24) as pool:
+            terms = pool.map(single_term_cover_counting, arguments)
         return sum(terms)
 
     if strategy == 'brute-force':
@@ -252,7 +287,8 @@ def configurations_bounded_intersection(ambient_size: int = 0,
 
 def coincidencetest(incidence_statistic, frequencies, number_samples,
                     correction_feature_set_size: int = None,
-                    strategy: str = 'closed-form'):
+                    strategy: str = 'closed-form',
+                    use_complementary_values: bool=None):
     """
     The `coincidencetest` is an exact test for the probability of "coincidence" of
     several binary features along a subsample of a given size, given the positivity
@@ -284,6 +320,13 @@ def coincidencetest(incidence_statistic, frequencies, number_samples,
           * 'sum-distribution': Sums values of the distribution (i.e. values of the
             function `calculate_probability_of_multicoincidence`), amounting to a
             double summation. Much slower than 'closed-form'.
+    use_complementary_values : bool
+        A parameter controlling optimization of the 'sum-distribution' strategy. If
+        True, summation take place over the lower range of statistic values,
+        starting from 0. If False, summation takes place over the upper range
+        starting from the provided incidence statistic. The default value is
+        dependent on other arguments, to minimize the number of terms requiring
+        computation. You may override this behavior by setting this parameter.
 
     Returns
     -------
@@ -319,6 +362,12 @@ def coincidencetest(incidence_statistic, frequencies, number_samples,
     if incidence_statistic > min(set_sizes):
         return 0
 
+    if use_complementary_values is None:
+        use_complementary_values = (
+            strategy == 'sum-distribution' and
+            incidence_statistic * 0.5 < ambient_size
+        )
+
     if strategy == 'closed-form':
         configurations = configurations_bounded_intersection(
             ambient_size=ambient_size,
@@ -349,6 +398,11 @@ def coincidencetest(incidence_statistic, frequencies, number_samples,
             (i, set_sizes, ambient_size)
             for i in range(incidence_statistic, min(set_sizes) + 1)
         ]
+        if use_complementary_values:
+            cases = [
+                (i, set_sizes, ambient_size)
+                for i in range(0, incidence_statistic)
+            ]
         probabilities = {
             i:
             calculate_probability_of_multicoincidence(
@@ -363,6 +417,8 @@ def coincidencetest(incidence_statistic, frequencies, number_samples,
             total = total * binom(correction_feature_set_size, len(set_sizes))
             total = min(total, 1.0)
         p_value = total
+        if use_complementary_values:
+            p_value = 1 - p_value
 
     return p_value
 
