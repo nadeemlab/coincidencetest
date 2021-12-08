@@ -9,6 +9,7 @@ from igraph import Graph
 import coincidencetest
 from coincidencetest.fca import find_concepts
 from coincidencetest import coincidencetest
+from coincidencetest.hierarchical_clustering import gather_hierarchical_clusters
 
 def gather_data(data, closed_sets, dual_sets):
     sums = data.apply(lambda row : sum(row), axis=0)
@@ -123,14 +124,26 @@ if __name__=='__main__':
         required=True,
         help='If provided, used as output filename for table of discovered signatures.'
     )
+    parser.add_argument(
+        '--hierarchical',
+        dest='hierarchical',
+        action='store_const',
+        const=False,
+        required=False,
+        help='Whether to just use hierarchical clustering to discover clusters.'
+    )
     args = parser.parse_args()
 
     delimiter = args.delimiter
     if delimiter == 'tab':
         delimiter = '\t'
     data = pd.read_csv(args.input_filename, delimiter=delimiter)
-    closed_sets, dual_sets = find_concepts(data, level_limit=args.level_limit, max_recursion=args.max_recursion)
-    gathered = gather_data(data, closed_sets, dual_sets)
+
+    if not args.hierarchical is None:
+        gathered = gather_hierarchical_clusters(data)
+    else:
+        closed_sets, dual_sets = find_concepts(data, level_limit=args.level_limit, max_recursion=args.max_recursion)
+        gathered = gather_data(data, closed_sets, dual_sets)
     
     table, original_sets = do_tests(gathered)
     table.to_csv(args.output_tsv, sep='\t', index=False)

@@ -12,6 +12,8 @@ long_description = get_file_contents('README.md')
 requirements = [
     'pandas==1.3.2',
     'python-igraph==0.9.6',
+    'numpy==1.21.0',
+    'scipy==1.7.1',
 ]
 version = get_file_contents(join('coincidencetest', 'version.txt'))
 
