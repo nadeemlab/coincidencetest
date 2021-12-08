@@ -81,6 +81,14 @@ coincidence-clustering \
   --max-recursion=3
 ```
 
+To instead use standard [hierarchical clustering](https://docs.scipy.org/doc/scipy/reference/generated/scipy.cluster.hierarchy.linkage.html) for feature set discovery, use:
+```bash
+coincidence-clustering \
+  --input-filename=example_data/bc_cell_data.tsv \
+  --output-tsv=signatures.tsv \
+  --hierarchical
+```
+
 ## Web application
 A Javascript port of the signature discovery and testing program is located in `webapp/`. To run it locally, use:
 ```bash
